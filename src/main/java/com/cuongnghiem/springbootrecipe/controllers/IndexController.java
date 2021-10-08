@@ -1,36 +1,30 @@
 package com.cuongnghiem.springbootrecipe.controllers;
 
-import com.cuongnghiem.springbootrecipe.model.Category;
-import com.cuongnghiem.springbootrecipe.model.UnitOfMeasure;
-import com.cuongnghiem.springbootrecipe.repositories.CategoryRepository;
-import com.cuongnghiem.springbootrecipe.repositories.UnitOfMeasureRepository;
+import com.cuongnghiem.springbootrecipe.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 /**
- * Created by cuongnghiem on 23/09/2021
- **/
+ * Created by jt on 6/1/17.
+ */
+@Slf4j
 @Controller
 public class IndexController {
 
-    private final CategoryRepository categoryRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final RecipeService recipeService;
 
-    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
-    @RequestMapping({"", "/", "/index", "/index.html"})
-    public String getIndex(){
+    @RequestMapping({"", "/", "/index"})
+    public String getIndexPage(Model model) {
+        log.debug("Getting Index page");
 
-        Optional<Category> categoryOptional = categoryRepository.findByDescription("Italian");
-        Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Pinch");
+        model.addAttribute("recipes", recipeService.getRecipes());
 
-        System.out.println("Category found is " + categoryOptional.get().getDescription());
-        System.out.println("UOM found is " + uomOptional.get().getDescription());
         return "index";
     }
 }
