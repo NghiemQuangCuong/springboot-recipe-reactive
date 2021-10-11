@@ -1,6 +1,6 @@
 package com.cuongnghiem.springbootrecipe.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +10,11 @@ import javax.persistence.Id;
 /**
  * Created by cuongnghiem on 27/09/2021
  **/
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class UnitOfMeasure {
 
