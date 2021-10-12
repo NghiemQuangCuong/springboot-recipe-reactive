@@ -44,4 +44,11 @@ class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"));
     }
+
+    @Test
+    void newRecipe() throws Exception{
+        mockMvc.perform(get("/recipe/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/new_or_update"));
+    }
 }

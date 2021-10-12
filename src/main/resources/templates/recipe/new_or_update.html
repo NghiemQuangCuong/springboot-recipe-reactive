@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Recipe</title>
+
+    <!-- without thymeleaf css-->
+    <link th:remove="all" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- with thymeleaf css-->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.1.1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+    </style>
+</head>
+
+    <div class="container">
+        <form th:object="${recipe}" th:action="@{/recipe}" th:method="POST" class="form-group">
+            <!-- Begin::Recipe Description -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <span>Description</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <label for="description" class="fw-bold">Recipe Description:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input th:field="*{description}" type="text" class="form-control" id="description">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <p class="fw-bold">Categories:</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <div th:remove="all">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                            <label class="form-check-label" for="defaultCheck1">
+                                                Default checkbox 1
+                                            </label>
+                                        </div>
+                                        <div th:remove="all">
+                                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                            <label class="form-check-label" for="defaultCheck2">
+                                                Default checkbox 2
+                                            </label>
+                                        </div>
+                                        <!-- Thymeleaf implement for check box category -->
+                                        <div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-3">
+                                    <label for="prepTime" class="fw-bold">Prepare Time:</label>
+                                </div>
+                                <div class="col-3">
+                                    <input th:field="*{prepTime}" type="text" class="form-control" id="prepTime">
+                                </div>
+                                <div class="col-3">
+                                    <label for="difficulty" class="fw-bold">Difficulty:</label>
+                                </div>
+                                <div class="col-3">
+                                    <select id="difficulty" class="form-select">
+                                        <option selected>Easy</option>
+                                        <option>Medium</option>
+                                        <option>Hard</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-3">
+                                    <label for="cookTime" class="fw-bold">Cook Time:</label>
+                                </div>
+                                <div class="col-3">
+                                    <input th:field="*{cookTime}" type="text" class="form-control" id="cookTime">
+                                </div>
+                                <div class="col-3">
+                                    <label for="servings" class="fw-bold">Servings:</label>
+                                </div>
+                                <div class="col-3">
+                                    <input th:field="*{servings}" type="text" class="form-control" id="servings">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-3">
+                                    <label for="source" class="fw-bold">Source:</label>
+                                </div>
+                                <div class="col-3">
+                                    <input th:field="*{source}" type="text" class="form-control" id="source">
+                                </div>
+                                <div class="col-3">
+                                    <label for="url" class="fw-bold">URL:</label>
+                                </div>
+                                <div class="col-3">
+                                    <input th:field="*{url}" type="text" class="form-control" id="url">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End::Recipe Description -->
+
+            <!-- Begin::Recipe Ingredients -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="align-self-center">Ingredients</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul>
+                                <li th:remove="all">Ingredient one</li>
+                                <li th:remove="all">Ingredient two</li>
+                                <li th:remove="all">Ingredient three</li>
+                                <li th:each="ingredient : ${recipe.getIngredientStringSet()}">
+                                    <span th:text="${ingredient}">Ingredient</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End::Recipe Ingredients -->
+
+            <!-- Begin::Recipe Directions -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <label for="direction">Directions</label>
+                        </div>
+                        <div class="card-body">
+                            <textarea th:field="*{directions}" class="form-control" id="direction" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End::Recipe Directions -->
+
+            <!-- Begin::Recipe Notes -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <label for="notes">Notes</label>
+                        </div>
+                        <div class="card-body">
+                            <textarea th:field="*{notes.recipeNotes}" class="form-control" id="notes" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End::Recipe Notes -->
+
+            <div class="row justify-content-center mt-4 mb-4">
+                <div class="col-md-8">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+<body>
+
+
+
+<!-- without thymeleaf bundle -->
+<script th:remove="all" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"
+></script>
+<!-- with thymeleaf bundle -->
+<script th:src="@{/webjars/bootstrap/5.1.1/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
