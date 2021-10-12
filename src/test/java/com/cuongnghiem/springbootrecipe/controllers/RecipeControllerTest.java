@@ -1,5 +1,6 @@
 package com.cuongnghiem.springbootrecipe.controllers;
 
+import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,8 @@ class RecipeControllerTest {
     RecipeController recipeController;
     @Mock
     RecipeService recipeService;
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
 
     MockMvc mockMvc;
 

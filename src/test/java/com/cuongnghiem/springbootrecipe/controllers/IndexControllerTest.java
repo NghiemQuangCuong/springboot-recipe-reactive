@@ -1,12 +1,16 @@
 package com.cuongnghiem.springbootrecipe.controllers;
 
+import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
+import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
@@ -20,19 +24,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@ExtendWith(MockitoExtension.class)
 class IndexControllerTest {
 
+    @InjectMocks
     private IndexController indexController;
 
     @Mock
     private RecipeService recipeService;
     @Mock
+    private RecipeToRecipeCommand recipeToRecipeCommand;
+    @Mock
     private Model model;
+
+    private Long newRecipeCommandId = 1L;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        indexController = new IndexController(recipeService);
     }
 
     @Test
@@ -48,14 +56,19 @@ class IndexControllerTest {
     void getIndexPage() {
         //given
         Set<Recipe> recipeSet = new HashSet<>();
-        recipeSet.add(new Recipe());
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         recipeSet.add(recipe);
+        Recipe recipe1 = new Recipe();
+        recipe1.setId(2L);
+        recipeSet.add(recipe1);
 
         when(recipeService.getRecipes()).thenReturn(recipeSet);
+        when(recipeToRecipeCommand.convert(recipe)).thenReturn(newRecipeCommand());
+        when(recipeToRecipeCommand.convert(recipe1)).thenReturn(newRecipeCommand());
 
-        ArgumentCaptor<Set<Recipe>> setArgumentCaptor = ArgumentCaptor.forClass(Set.class);
+
+        ArgumentCaptor<Set<RecipeCommand>> setArgumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         //when
         String result = indexController.getIndexPage(model);
@@ -65,5 +78,11 @@ class IndexControllerTest {
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), setArgumentCaptor.capture());
         assertEquals(2, setArgumentCaptor.getValue().size());
+    }
+
+    private RecipeCommand newRecipeCommand() {
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(newRecipeCommandId++);
+        return recipeCommand;
     }
 }

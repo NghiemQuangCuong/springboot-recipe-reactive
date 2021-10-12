@@ -1,5 +1,6 @@
 package com.cuongnghiem.springbootrecipe.controllers;
 
+import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeService = recipeService;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     @RequestMapping({"/show/{id}"})
@@ -23,13 +26,14 @@ public class RecipeController {
         try {
             Recipe recipe = recipeService.getRecipeById(Long.valueOf(id));
             if (recipe != null) {
-                model.addAttribute("recipe", recipe);
+                model.addAttribute("recipe", recipeToRecipeCommand.convert(recipe));
                 return "recipe/show";
             }
         } catch (NumberFormatException exception) {
             return "404";
         }
-
         return "404";
     }
+
+
 }

@@ -62,29 +62,4 @@ public class Recipe {
         }
         return this;
     }
-
-    public Set<String> getIngredientStringSet() {
-        Set<String> ingredientStringSet = new HashSet<>();
-        ingredients.forEach(ingredient -> {
-
-            String amount;
-            if (ingredient.getAmount() == null)
-                amount = "";
-            else if (ingredient.getAmount().stripTrailingZeros().scale() <= 0)
-                amount = String.valueOf(ingredient.getAmount().intValue());
-            else
-                amount = String.valueOf(ingredient.getAmount().floatValue());
-
-            String uom = (ingredient.getUom() == null) ? "" : ingredient.getUom().getDescription();
-            String description = (ingredient.getDescription() == null) ? "" : ingredient.getDescription();
-
-            ingredientStringSet.add(new StringBuilder()
-                    .append(amount).append(" ")
-                    .append(uom).append(" ")
-                    .append(description)
-                    .toString());
-        });
-
-        return ingredientStringSet;
-    }
 }

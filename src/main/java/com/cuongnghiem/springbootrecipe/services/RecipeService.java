@@ -1,5 +1,6 @@
 package com.cuongnghiem.springbootrecipe.services;
 
+import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 
 import java.util.Set;
@@ -11,4 +12,5 @@ public interface RecipeService {
 
     Set<Recipe> getRecipes();
     Recipe getRecipeById(Long id);
+    RecipeCommand saveRecipeCommand(RecipeCommand command);
 }

@@ -1,12 +1,17 @@
 package com.cuongnghiem.springbootrecipe.services;
 
 
+import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
+import com.cuongnghiem.springbootrecipe.converters.RecipeCommandToRecipe;
+import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -19,19 +24,20 @@ import static org.mockito.Mockito.*;
 /**
  * Created by jt on 6/17/17.
  */
+@ExtendWith(MockitoExtension.class)
 public class RecipeServiceImplTest {
 
+    @InjectMocks
     RecipeServiceImpl recipeService;
-
     @Mock
     RecipeRepository recipeRepository;
-
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        recipeService = new RecipeServiceImpl(recipeRepository);
     }
 
     @Test
@@ -60,5 +66,23 @@ public class RecipeServiceImplTest {
 
         assertNotNull(recipeResult);
         assertEquals(recipe, recipeResult);
+    }
+
+    @Test
+    void saveRecipeCommand() {
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setDescription("Description");
+        Recipe recipe = new Recipe();
+        recipe.setDescription("Description");
+        recipe.setId(1L);
+
+        when(recipeRepository.save(any())).thenReturn(recipe);
+        recipeCommand.setId(1L);
+        when(recipeToRecipeCommand.convert(recipe)).thenReturn(recipeCommand);
+
+        RecipeCommand recipeCommandResult = recipeService.saveRecipeCommand(recipeCommand);
+
+        assertNotNull(recipeCommandResult.getId());
+        assertEquals("Description", recipeCommandResult.getDescription());
     }
 }
