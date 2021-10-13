@@ -104,7 +104,15 @@ public class RecipeServiceImplTest {
 
     @Test
     void deleteById() {
+        // given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        // when
         recipeService.deleteById(1L);
+
+        // then
         verify(recipeRepository, times(1)).deleteById(anyLong());
     }
 }
