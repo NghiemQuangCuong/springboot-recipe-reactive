@@ -86,14 +86,16 @@ class RecipeControllerTest {
 
     @Test
     void testDeleteRecipeWithValidId() throws Exception {
-        mockMvc.perform(get("/recipe/1/delete"))
+        mockMvc.perform(post("/recipe/1/delete")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
     }
 
     @Test
     void testDeleteRecipeWithInvalidId() throws Exception {
-        mockMvc.perform(get("/recipe/abcxyz/delete"))
+        mockMvc.perform(post("/recipe/abcxyz/delete")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(view().name("404"));
     }
