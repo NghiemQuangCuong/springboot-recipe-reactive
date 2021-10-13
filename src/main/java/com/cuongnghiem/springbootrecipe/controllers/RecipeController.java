@@ -4,6 +4,7 @@ import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
 import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
 @RequestMapping({"/recipe"})
 public class RecipeController {
@@ -23,32 +25,50 @@ public class RecipeController {
         this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
-    @RequestMapping({"/show/{id}"})
+    @RequestMapping({"/{id}/show"})
     public String getRecipe(@PathVariable String id, Model model) {
-
+        log.debug("[GET] - /recipe/" + id + "/show");
         try {
             Recipe recipe = recipeService.getRecipeById(Long.valueOf(id));
             if (recipe != null) {
                 model.addAttribute("recipe", recipeToRecipeCommand.convert(recipe));
                 return "recipe/show";
             }
+            return "404";
         } catch (NumberFormatException exception) {
             return "404";
         }
-        return "404";
     }
 
     @RequestMapping({"/new"})
     public String newRecipe(Model model) {
+        log.debug("[GET] - /recipe/new");
         model.addAttribute("recipe", new RecipeCommand());
 
         return "recipe/new_or_update";
     }
 
+    @RequestMapping("/{id}/update")
+    public String updateRecipe(@PathVariable String id, Model model) {
+        log.debug("[GET] - /recipe/" + id + "/update");
+        try {
+            RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
+            if (recipeCommand != null) {
+                model.addAttribute("recipe", recipeCommand);
+                return "recipe/new_or_update";
+            }
+           return "404";
+        }
+        catch (NumberFormatException ex) {
+            return "404";
+        }
+    }
+
     @PostMapping({"", "/"})
     public String saveOrUpdate(@ModelAttribute RecipeCommand command){
-         RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command);
+        log.debug("[POST] - /recipe");
+        RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command);
 
-        return "redirect:/recipe/show/" + recipeCommand.getId();
+        return "redirect:/recipe/" + recipeCommand.getId() + "/show";
     }
 }

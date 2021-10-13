@@ -8,6 +8,7 @@ import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public Set<Recipe> getRecipes() {
         Set<Recipe> recipeSet = new HashSet<>();
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
@@ -37,11 +39,22 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public Recipe getRecipeById(Long id) {
         return recipeRepository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional
+    public RecipeCommand getRecipeCommandById(Long id) {
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe == null)
+            return null;
+        return recipeToRecipeCommand.convert(recipe);
+    }
+
+    @Override
+    @Transactional
     public RecipeCommand saveRecipeCommand(RecipeCommand command) {
         if (command == null)
             return null;

@@ -16,6 +16,7 @@
 
     <div class="container">
         <form th:object="${recipe}" th:action="@{/recipe}" th:method="POST" class="form-group">
+            <input type="hidden" th:field="*{id}">
             <!-- Begin::Recipe Description -->
             <div class="row justify-content-center mt-4">
                 <div class="col-md-8">

@@ -85,4 +85,20 @@ public class RecipeServiceImplTest {
         assertNotNull(recipeCommandResult.getId());
         assertEquals("Description", recipeCommandResult.getDescription());
     }
+
+    @Test
+    void getRecipeCommandById() {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
+
+        RecipeCommand command = recipeService.getRecipeCommandById(1L);
+
+        assertNotNull(command);
+        assertEquals(1L, command.getId());
+    }
 }
