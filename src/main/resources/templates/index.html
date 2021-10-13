@@ -53,8 +53,10 @@
                         <td><a th:href="@{'/recipe/' + ${recipe.id} + '/show'}" th:text="'View'">View</a></td>
                         <td><a th:href="@{'/recipe/' + ${recipe.id} + '/update'}" th:text="'Update'">Update</a></td>
                         <td>
-                            <form th:action="@{'/recipe/' + ${recipe.id} + '/delete'}" th:method="POST">
-                                <button type="submit" class="btn btn-link" th:text="'Delete'">Delete</button>
+                            <form id="deleteRecipeForm" th:action="@{'/recipe/' + ${recipe.id} + '/delete'}" th:method="POST">
+                                <a href="javascript:{}"
+                                   th:text="'Delete'"
+                                   th:onclick="document.getElementById('deleteRecipeForm').submit()">Delete</a>
                             </form>
                         </td>
                     </tr>
