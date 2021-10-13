@@ -22,6 +22,7 @@
                         <th scope="col">Description</th>
                         <th scope="col">View</th>
                         <th scope="col">Update</th>
+                        <th scope="col">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,24 +31,28 @@
                         <td>Recipe Description 1</td>
                         <td><a href="#">View</a></td>
                         <td><a href="#">Update</a> </td>
+                        <td><a href="#">Delete</a> </td>
                     </tr>
                     <tr th:remove="all">
                         <td>2</td>
                         <td>Recipe Description 2</td>
                         <td><a href="#">View</a></td>
                         <td><a href="#">Update</a> </td>
+                        <td><a href="#">Delete</a> </td>
                     </tr>
                     <tr th:remove="all">
                         <td>3</td>
                         <td>Recipe Description 3</td>
                         <td><a href="#">View</a></td>
                         <td><a href="#">Update</a> </td>
+                        <td><a href="#">Delete</a> </td>
                     </tr>
                     <tr th:each="recipe : ${recipes}">
                         <td th:text="${recipe.id}">ID</td>
                         <td th:text="${recipe.description}">Recipe Description</td>
-                        <td><a th:href="@{'/recipe/' + ${recipe.id} + '/show/'}" th:text="'View'">View</a></td>
+                        <td><a th:href="@{'/recipe/' + ${recipe.id} + '/show'}" th:text="'View'">View</a></td>
                         <td><a th:href="@{'/recipe/' + ${recipe.id} + '/update'}" th:text="'Update'">Update</a></td>
+                        <td><a th:href="@{'/recipe/' + ${recipe.id} + '/delete'}" th:text="'Delete'">Delete</a></td>
                     </tr>
                     </tbody>
                 </table>

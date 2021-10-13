@@ -101,4 +101,10 @@ public class RecipeServiceImplTest {
         assertNotNull(command);
         assertEquals(1L, command.getId());
     }
+
+    @Test
+    void deleteById() {
+        recipeService.deleteById(1L);
+        verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
 }

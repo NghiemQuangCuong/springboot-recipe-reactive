@@ -83,4 +83,18 @@ class RecipeControllerTest {
                 .andExpect(view().name("recipe/new_or_update"))
                 .andExpect(model().attributeExists("recipe"));
     }
+
+    @Test
+    void testDeleteRecipeWithValidId() throws Exception {
+        mockMvc.perform(get("/recipe/1/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+    }
+
+    @Test
+    void testDeleteRecipeWithInvalidId() throws Exception {
+        mockMvc.perform(get("/recipe/abcxyz/delete"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("404"));
+    }
 }

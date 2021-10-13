@@ -7,10 +7,7 @@ import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -25,7 +22,7 @@ public class RecipeController {
         this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
-    @RequestMapping({"/{id}/show"})
+    @GetMapping({"/{id}/show"})
     public String getRecipe(@PathVariable String id, Model model) {
         log.debug("[GET] - /recipe/" + id + "/show");
         try {
@@ -40,7 +37,7 @@ public class RecipeController {
         }
     }
 
-    @RequestMapping({"/new"})
+    @GetMapping({"/new"})
     public String newRecipe(Model model) {
         log.debug("[GET] - /recipe/new");
         model.addAttribute("recipe", new RecipeCommand());
@@ -48,7 +45,7 @@ public class RecipeController {
         return "recipe/new_or_update";
     }
 
-    @RequestMapping("/{id}/update")
+    @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
         log.debug("[GET] - /recipe/" + id + "/update");
         try {
@@ -70,5 +67,17 @@ public class RecipeController {
         RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + recipeCommand.getId() + "/show";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteRecipe(@PathVariable String id) {
+        log.debug("[GET] - Delete recipe id = " + id);
+        try {
+            recipeService.deleteById(Long.valueOf(id));
+            return "redirect:/";
+        } catch (NumberFormatException exception) {
+            log.debug("Failed to delete recipe id = " + id);
+            return "404";
+        }
     }
 }

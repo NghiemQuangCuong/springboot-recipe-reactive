@@ -161,6 +161,7 @@
                             <label for="notes">Notes</label>
                         </div>
                         <div class="card-body">
+                            <input type="hidden" th:field="*{notes.id}">
                             <textarea th:field="*{notes.recipeNotes}" class="form-control" id="notes" rows="5"></textarea>
                         </div>
                     </div>
