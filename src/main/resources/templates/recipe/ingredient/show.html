@@ -19,6 +19,7 @@
                 <thead>
                 <tr class="table-primary">
                     <th scope="col" th:text="${recipe.description} + ' Ingredients'">Recipe Ingredient Description</th>
+                    <th scope="col">View</th>
                     <th scope="col">Update</th>
                     <th scope="col">Delete</th>
                 </tr>
@@ -26,21 +27,25 @@
                 <tbody>
                 <tr th:remove="all">
                     <td>Ingredient 1</td>
+                    <td><a href="#">View</a> </td>
                     <td><a href="#">Update</a> </td>
                     <td><a href="#">Delete</a> </td>
                 </tr>
                 <tr th:remove="all">
                     <td>Ingredient 2</td>
+                    <td><a href="#">View</a> </td>
                     <td><a href="#">Update</a> </td>
                     <td><a href="#">Delete</a> </td>
                 </tr>
                 <tr th:remove="all">
                     <td>Ingredient 3</td>
+                    <td><a href="#">View</a> </td>
                     <td><a href="#">Update</a> </td>
                     <td><a href="#">Delete</a> </td>
                 </tr>
-                <tr th:each="ingredient : ${recipe.getIngredientStringSet()}">
-                    <td th:text="${ingredient}">Ingredient Description</td>
+                <tr th:each="ingredient : ${recipe.ingredients}">
+                    <td th:text="${ingredient.toIngredientString()}">Ingredient Description</td>
+                    <td><a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/show'}" th:text="'View'">View</a></td>
                     <td><a th:href="@{#}" th:text="'Update'">Update</a></td>
                     <td>
                         <form id="deleteIngredientForm" th:action="@{#}" th:method="POST">
