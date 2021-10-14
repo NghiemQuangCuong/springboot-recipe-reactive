@@ -2,6 +2,7 @@ package com.cuongnghiem.springbootrecipe.services;
 
 import com.cuongnghiem.springbootrecipe.command.UnitOfMeasureCommand;
 import com.cuongnghiem.springbootrecipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
+import com.cuongnghiem.springbootrecipe.model.UnitOfMeasure;
 import com.cuongnghiem.springbootrecipe.repositories.UnitOfMeasureRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,11 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService{
     public UnitOfMeasureServiceImpl(UnitOfMeasureRepository unitOfMeasureRepository, UnitOfMeasureToUnitOfMeasureCommand converter) {
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.converter = converter;
+    }
+
+    @Override
+    public UnitOfMeasure getUOMById(Long id) {
+        return unitOfMeasureRepository.findById(id).orElse(null);
     }
 
     @Override

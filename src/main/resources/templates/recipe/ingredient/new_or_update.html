@@ -25,6 +25,7 @@
                     <form th:object="${ingredient}" th:action="@{/recipe/ingredient/update}" th:method="POST">
                         <div class="row">
                             <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{recipeId}">
                             <div class="col">
                                 <label for="description" class="fw-bold">Description:</label>
                                 <input th:field="*{description}" type="text" class="form-control" id="description" >

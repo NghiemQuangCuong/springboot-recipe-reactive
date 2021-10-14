@@ -81,7 +81,13 @@ public class IngredientController {
     @PostMapping("/ingredient/update")
     public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
 
-        IngredientCommand ingredientCommand1 = ingredientCommand;
+        IngredientCommand savedIngredientCommand
+                = ingredientService.saveIngredientCommand(ingredientCommand);
+
+        if (savedIngredientCommand != null)
+            return "redirect:/recipe/" +
+                savedIngredientCommand.getRecipeId() + "/ingredient/" +
+                savedIngredientCommand.getId() + "/show";
 
         return "404";
     }

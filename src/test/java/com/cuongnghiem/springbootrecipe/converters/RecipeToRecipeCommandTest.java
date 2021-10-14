@@ -46,7 +46,10 @@ class RecipeToRecipeCommandTest {
         recipe.setDifficulty(DIFFICULTY);
         recipe.setNotes(new Notes());
         recipe.getCategories().add(new Category());
-        recipe.getIngredients().add(new Ingredient());
+        Ingredient ingredient = new Ingredient();
+        ingredient.setRecipe(recipe);
+        recipe.getIngredients().add(ingredient);
+
 
         // then
         RecipeCommand recipeCommand = recipeToRecipeCommand.convert(recipe);

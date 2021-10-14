@@ -31,7 +31,7 @@ class RecipeCommandToRecipeTest {
     void setUp() {
         recipeCommandToRecipe = new RecipeCommandToRecipe(
                 new NotesCommandToNotes(),
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure(), recipeService),
+                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
                 new CategoryCommandToCategory());
     }
 

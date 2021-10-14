@@ -2,6 +2,7 @@ package com.cuongnghiem.springbootrecipe.converters;
 
 import com.cuongnghiem.springbootrecipe.command.IngredientCommand;
 import com.cuongnghiem.springbootrecipe.model.Ingredient;
+import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.model.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,7 @@ class IngredientToIngredientCommandTest {
         ingredient.setDescription(DESCRIPTION);
         ingredient.setAmount(AMOUNT);
         ingredient.setUom(UOM);
+        ingredient.setRecipe(new Recipe());
 
         // when
         IngredientCommand ingredientCommand = ingredientToIngredientCommand.convert(ingredient);
