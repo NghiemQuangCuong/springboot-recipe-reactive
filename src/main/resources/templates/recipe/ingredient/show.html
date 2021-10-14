@@ -46,7 +46,7 @@
                 <tr th:each="ingredient : ${recipe.ingredients}">
                     <td th:text="${ingredient.toIngredientString()}">Ingredient Description</td>
                     <td><a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/show'}" th:text="'View'">View</a></td>
-                    <td><a th:href="@{#}" th:text="'Update'">Update</a></td>
+                    <td><a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/' + ${ingredient.id} + '/update'}" th:text="'Update'">Update</a></td>
                     <td>
                         <form id="deleteIngredientForm" th:action="@{#}" th:method="POST">
                             <a href="javascript:{}"

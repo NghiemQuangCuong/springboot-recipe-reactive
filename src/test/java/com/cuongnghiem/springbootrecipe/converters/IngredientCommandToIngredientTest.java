@@ -24,7 +24,7 @@ class IngredientCommandToIngredientTest {
     @BeforeEach
     void setUp() {
         unitOfMeasureCommandToUnitOfMeasure = new UnitOfMeasureCommandToUnitOfMeasure();
-        ingredientCommandToIngredient = new IngredientCommandToIngredient(unitOfMeasureCommandToUnitOfMeasure);
+        ingredientCommandToIngredient = new IngredientCommandToIngredient(unitOfMeasureCommandToUnitOfMeasure, recipeService);
     }
 
     @Test

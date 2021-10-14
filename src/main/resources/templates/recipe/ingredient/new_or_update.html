@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingredient Update</title>
+
+    <!-- without thymeleaf css-->
+    <link th:remove="all" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- with thymeleaf css-->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.1.1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+<div class="container" th:if="${ingredient} != null">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Ingredient Update
+                </div>
+                <div class="card-body">
+                    <form th:object="${ingredient}" th:action="@{/recipe/ingredient/update}" th:method="POST">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="col">
+                                <label for="description" class="fw-bold">Description:</label>
+                                <input th:field="*{description}" type="text" class="form-control" id="description" >
+                            </div>
+                            <div class="col-md-3">
+                                <label for="amount" class="fw-bold">Amount:</label>
+                                <input th:field="*{amount}" type="number" class="form-control" id="amount" >
+                            </div>
+                            <div class="col-md-3">
+                                <label for="uom" class="fw-bold">UoM:</label>
+                                <select th:remove="all" class="form-select" aria-label="Default select example">
+                                    <option selected>UoM 1</option>
+                                    <option value="1">UoM 2</option>
+                                    <option value="2">UoM 3</option>
+                                    <option value="3">UoM 4</option>
+                                </select>
+                                <select th:field="*{uom.id}" class="form-select" aria-label="Default select example" id="uom">
+                                    <div th:each="uom : ${listUOM}">
+                                        <option th:text="${uom.description}"
+                                                th:value="${uom.id}"
+                                                th:selected="${uom.description.equals(ingredient.uom.description)}">UoM Option</option>
+                                    </div>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- without thymeleaf bundle -->
+<script th:remove="all" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"
+></script>
+<!-- with thymeleaf bundle -->
+<script th:src="@{/webjars/bootstrap/5.1.1/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
