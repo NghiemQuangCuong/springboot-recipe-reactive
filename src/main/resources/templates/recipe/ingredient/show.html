@@ -15,7 +15,12 @@
 <div class="container">
     <div class="row" style="margin-top: 20px;">
         <div class="col">
-            <table class="table table-striped table-hover">
+            <div class="row mt-1">
+                <div class="col-md-2">
+                    <a th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}" class="btn btn-success"  th:text="'New'">New</a>
+                </div>
+            </div>
+            <table class="table table-striped table-hover mt-3">
                 <thead>
                 <tr class="table-primary">
                     <th scope="col" th:text="${recipe.description} + ' Ingredients'">Recipe Ingredient Description</th>

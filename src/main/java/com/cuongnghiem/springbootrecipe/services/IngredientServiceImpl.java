@@ -49,16 +49,16 @@ public class IngredientServiceImpl implements IngredientService{
     @Override
     @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
+        try {
+            Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
+            ingredient.setRecipe(recipeService.getRecipeById(ingredientCommand.getRecipeId()));
+            ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()));
+            ingredientRepository.save(ingredient);
 
-         Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
-         ingredient.setRecipe(recipeService.getRecipeById(ingredientCommand.getRecipeId()));
-         ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()));
-
-         ingredientRepository.save(ingredient);
-
-         return ingredientToIngredientCommand.convert(ingredient);
-
-
+            return ingredientToIngredientCommand.convert(ingredient);
+        } catch (RuntimeException exception) {
+            return null;
+        }
 //        Recipe recipe = recipeService.getRecipeById(ingredientCommand.getRecipeId());
 //
 //        if (recipe == null) {

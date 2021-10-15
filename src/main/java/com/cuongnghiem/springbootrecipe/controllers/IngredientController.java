@@ -78,9 +78,28 @@ public class IngredientController {
         }
     }
 
+    @GetMapping("/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model) {
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        try {
+            if (recipeService.getRecipeById(Long.valueOf(recipeId)) == null)
+                return "404";
+
+            ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        } catch (NumberFormatException exception) {
+            return "404";
+        }
+
+        Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
+
+        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("listUOM", listUOM);
+
+        return "recipe/ingredient/new_or_update";
+    }
+
     @PostMapping("/ingredient/update")
     public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
-
         IngredientCommand savedIngredientCommand
                 = ingredientService.saveIngredientCommand(ingredientCommand);
 
