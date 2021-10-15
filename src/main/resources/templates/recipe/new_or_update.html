@@ -52,7 +52,18 @@
                                             </label>
                                         </div>
                                         <!-- Thymeleaf implement for check box category -->
-                                        <div>
+                                        <div th:each="category : ${listCategory}">
+                                            <input class="form-check-input" type="checkbox"
+                                                    th:id="${category.description}"
+                                                    name="cats"
+                                                    th:value="${category.id}"
+                                                    th:checked="${recipe.categories.contains(category)}">
+
+                                            <label class="form-check-label"
+                                                    th:for="${category.description}"
+                                                    th:text="${category.description}">
+                                                CheckBox Label
+                                            </label>
                                         </div>
                                     </div>
                                 </div>

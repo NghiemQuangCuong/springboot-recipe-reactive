@@ -3,6 +3,7 @@ package com.cuongnghiem.springbootrecipe.controllers;
 import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
 import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
+import com.cuongnghiem.springbootrecipe.services.CategoryService;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.HashSet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -30,6 +33,8 @@ class RecipeControllerTest {
     RecipeService recipeService;
     @Mock
     RecipeToRecipeCommand recipeToRecipeCommand;
+    @Mock
+    CategoryService categoryService;
 
     MockMvc mockMvc;
 
@@ -50,6 +55,9 @@ class RecipeControllerTest {
 
     @Test
     void newRecipe() throws Exception{
+
+        when(categoryService.getAllCategoryCommand()).thenReturn(new HashSet<>());
+
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/new_or_update"))
@@ -77,6 +85,7 @@ class RecipeControllerTest {
         recipeCommand.setId(1L);
 
         when(recipeService.getRecipeCommandById(anyLong())).thenReturn(recipeCommand);
+        when(categoryService.getAllCategoryCommand()).thenReturn(new HashSet<>());
 
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
