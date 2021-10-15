@@ -68,10 +68,10 @@
                                     <label for="difficulty" class="fw-bold">Difficulty:</label>
                                 </div>
                                 <div class="col-3">
-                                    <select id="difficulty" class="form-select">
-                                        <option selected>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select id="difficulty" class="form-select" th:field="*{difficulty}">
+                                        <option th:each="difficult : ${T(com.cuongnghiem.springbootrecipe.model.Difficulty).values()}"
+                                            th:value="${difficult.name()}"
+                                            th:text="${difficult.name()}">DIFFICULTY</option>
                                     </select>
                                 </div>
                             </div>

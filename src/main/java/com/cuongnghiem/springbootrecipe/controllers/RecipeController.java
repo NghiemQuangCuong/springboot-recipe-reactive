@@ -24,7 +24,6 @@ public class RecipeController {
 
     @GetMapping({"/{id}/show"})
     public String getRecipe(@PathVariable String id, Model model) {
-        log.debug("[GET] - /recipe/" + id + "/show");
         try {
             Recipe recipe = recipeService.getRecipeById(Long.valueOf(id));
             if (recipe != null) {
@@ -39,7 +38,6 @@ public class RecipeController {
 
     @GetMapping({"/new"})
     public String newRecipe(Model model) {
-        log.debug("[GET] - /recipe/new");
         model.addAttribute("recipe", new RecipeCommand());
 
         return "recipe/new_or_update";
@@ -47,7 +45,6 @@ public class RecipeController {
 
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
-        log.debug("[GET] - /recipe/" + id + "/update");
         try {
             RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
             if (recipeCommand != null) {
@@ -63,7 +60,6 @@ public class RecipeController {
 
     @PostMapping({"", "/"})
     public String saveOrUpdate(@ModelAttribute RecipeCommand command){
-        log.debug("[POST] - /recipe");
         RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + recipeCommand.getId() + "/show";
@@ -71,7 +67,6 @@ public class RecipeController {
 
     @PostMapping("/{id}/delete")
     public String deleteRecipe(@PathVariable String id) {
-        log.debug("[POST] - Delete recipe id = " + id);
         try {
             recipeService.deleteById(Long.valueOf(id));
             return "redirect:/";
