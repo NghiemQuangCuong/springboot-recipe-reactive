@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional
 public class IngredientServiceImpl implements IngredientService{
 
     private final IngredientRepository ingredientRepository;
@@ -47,7 +48,6 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         try {
             Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
@@ -59,47 +59,15 @@ public class IngredientServiceImpl implements IngredientService{
         } catch (RuntimeException exception) {
             return null;
         }
-//        Recipe recipe = recipeService.getRecipeById(ingredientCommand.getRecipeId());
-//
-//        if (recipe == null) {
-//            log.debug("cannot find recipe");
-//            return null;
-//        }
-//
-//        Ingredient foundIngredient =
-//                recipe.getIngredients().stream()
-//                        .filter(ingredient -> Objects.equals(ingredient.getId(), ingredientCommand.getId()))
-//                        .findFirst().orElse(null);
-//
-//        if (ingredientCommand.getId() != null && foundIngredient == null)
-//        {
-//            log.debug("cannot find ingredient in recipe");
-//            return null;
-//        }
-//
-//        UnitOfMeasure uom = unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId());
-//        if (uom == null) {
-//            log.debug("cannot find UoM");
-//            return null;
-//        }
-//
-//        if (foundIngredient == null){
-//            Ingredient newIngredient = ingredientCommandToIngredient.convert(ingredientCommand);
-//            newIngredient.setUom(uom);
-//            recipe.getIngredients().add(newIngredient);
-//        }
-//        else {
-//            foundIngredient.setDescription(ingredientCommand.getDescription());
-//            foundIngredient.setAmount(ingredientCommand.getAmount());
-//            foundIngredient.setUom(uom);
-//        }
-//
-//        recipeRepository.save(recipe);
-//
-//        Ingredient savedIngredient = recipe.getIngredients().stream()
-//                .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
-//                .findFirst().orElse(null);
+    }
 
-//        return ingredientToIngredientCommand.convert(savedIngredient) ;
+    @Override
+    public void deleteByIdAndRecipeId(Long id, Long recipeId) {
+        Ingredient ingredient =
+                ingredientRepository.findByRecipe_IdAndId(recipeId, id).orElse(null);
+        if (ingredient == null)
+            throw new RuntimeException("Cannot find ingredient");
+
+        ingredientRepository.delete(ingredient);
     }
 }

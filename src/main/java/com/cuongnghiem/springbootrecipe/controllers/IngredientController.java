@@ -6,12 +6,14 @@ import com.cuongnghiem.springbootrecipe.command.UnitOfMeasureCommand;
 import com.cuongnghiem.springbootrecipe.services.IngredientService;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import com.cuongnghiem.springbootrecipe.services.UnitOfMeasureService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+@Slf4j
 @Controller
 @RequestMapping("/recipe")
 public class IngredientController {
@@ -109,5 +111,18 @@ public class IngredientController {
                 savedIngredientCommand.getId() + "/show";
 
         return "404";
+    }
+
+    @PostMapping("/{recipeId}/ingredient/{ingredientId}/delete")
+    public String deleteIngredient(@PathVariable String recipeId,
+                                   @PathVariable String ingredientId) {
+        try {
+            ingredientService.deleteByIdAndRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+            return "redirect:/recipe/" + recipeId + "/ingredient/show";
+        } catch (NumberFormatException exception) {
+            return "404";
+        } catch (RuntimeException exception) {
+            return "404";
+        }
     }
 }

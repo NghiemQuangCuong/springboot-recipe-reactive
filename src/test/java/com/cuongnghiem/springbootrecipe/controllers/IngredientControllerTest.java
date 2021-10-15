@@ -2,6 +2,7 @@ package com.cuongnghiem.springbootrecipe.controllers;
 
 import com.cuongnghiem.springbootrecipe.command.IngredientCommand;
 import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
+import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.services.IngredientService;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import com.cuongnghiem.springbootrecipe.services.UnitOfMeasureService;
@@ -97,6 +98,7 @@ class IngredientControllerTest {
     @Test
     void newIngredient() throws Exception {
 
+        when(recipeService.getRecipeById(anyLong())).thenReturn(new Recipe());
         when(uomService.getAllUoMCommand()).thenReturn(new HashSet<>());
 
         mockMvc.perform(get("/recipe/1/ingredient/new"))
@@ -104,5 +106,14 @@ class IngredientControllerTest {
                 .andExpect(view().name("recipe/ingredient/new_or_update"))
                 .andExpect(model().attributeExists("ingredient"))
                 .andExpect(model().attributeExists("listUOM"));
+    }
+
+    @Test
+    void deleteIngredient() throws Exception {
+
+        mockMvc.perform(post("/recipe/1/ingredient/1/delete")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/1/ingredient/show"));
     }
 }
