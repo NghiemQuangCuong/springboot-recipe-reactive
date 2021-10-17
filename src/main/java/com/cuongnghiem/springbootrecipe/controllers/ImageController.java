@@ -65,6 +65,9 @@ public class ImageController {
             response.setContentType("image/*");
             InputStream is = new ByteArrayInputStream(image);
             IOUtils.copy(is, response.getOutputStream());
+
+            is.close();
+            response.getOutputStream().close();
         } catch (NumberFormatException exception) {
             log.debug("Cannot get recipe id = " + recipeId);
         } catch (IOException exception) {
