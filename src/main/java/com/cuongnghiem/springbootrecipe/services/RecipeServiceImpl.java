@@ -31,6 +31,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Recipe save(Recipe recipe) {
+        return recipeRepository.save(recipe);
+    }
+
+    @Override
     @Transactional
     public Set<Recipe> getRecipes() {
         Set<Recipe> recipeSet = new HashSet<>();

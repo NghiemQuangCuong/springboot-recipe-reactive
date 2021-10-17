@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public interface RecipeService {
 
+    Recipe save(Recipe recipe);
     Set<Recipe> getRecipes();
     Recipe getRecipeById(Long id);
     RecipeCommand getRecipeCommandById(Long id);

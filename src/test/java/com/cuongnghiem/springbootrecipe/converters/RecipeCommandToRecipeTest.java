@@ -22,7 +22,7 @@ class RecipeCommandToRecipeTest {
     public static final String SOURCE = "source";
     public static final String URL = "url";
     public static final String DIRECTIONS = "directions";
-    public static final Byte[] IMAGE = new Byte[2];
+    public static final byte[] IMAGE = new byte[2];
     public static final Difficulty DIFFICULTY = Difficulty.EASY;
 
     RecipeCommandToRecipe recipeCommandToRecipe;
