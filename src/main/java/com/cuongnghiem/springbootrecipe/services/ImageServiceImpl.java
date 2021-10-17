@@ -30,7 +30,5 @@ public class ImageServiceImpl implements ImageService {
 
         recipe.setImage(file.getBytes());
         recipeService.save(recipe);
-
-        log.debug("Image Saved");
     }
 }
