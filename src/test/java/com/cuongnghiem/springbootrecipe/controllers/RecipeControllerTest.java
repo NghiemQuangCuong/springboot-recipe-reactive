@@ -76,9 +76,20 @@ class RecipeControllerTest {
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
-                .param("description", "some String"))
+                .param("description", "some String")
+                .param("directions", "Some Directions"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/1/show"));
+    }
+
+    @Test
+    void testPostNewRecipeFail() throws Exception{
+
+        mockMvc.perform(post("/recipe")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/new_or_update"));
     }
 
     @Test

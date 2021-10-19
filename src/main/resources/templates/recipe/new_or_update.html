@@ -22,7 +22,7 @@
                         <div class="card-header bg-primary text-white">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <span th:text="${recipe.description}">Description</span>
+                                    <span th:text="'Edit Recipe Information'">Edit Recipe Information</span>
                                 </div>
                                 <div class="col-md-4">
                                     <a class="btn btn-success" th:href="@{'/recipe/' + ${recipe.id} + '/image/upload'}" th:text="'Change Image'">Change image</a>
@@ -32,10 +32,25 @@
                         <div class="card-body">
                             <div class="row mt-3">
                                 <div class="col-md-3">
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <label for="description" class="fw-bold">Recipe Description:</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input th:field="*{description}" type="text" class="form-control" id="description">
+                                    <input  th:field="*{description}" type="text"
+                                            th:class="'form-control'"
+                                            id="description"
+                                            th:errorclass="is-invalid">
+
+                                    <div    th:if="${#fields.hasErrors('description')}"
+                                            th:each="error : ${#fields.errors('description')}"
+                                            th:text="${error}"
+                                            class="invalid-feedback">
+                                        Error Display
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -82,7 +97,12 @@
                                     <label for="prepTime" class="fw-bold">Prepare Time:</label>
                                 </div>
                                 <div class="col-3">
-                                    <input th:field="*{prepTime}" type="text" class="form-control" id="prepTime">
+                                    <input th:field="*{prepTime}" th:errorclass="is-invalid" type="text" class="form-control" id="prepTime">
+                                    <div th:if="${#fields.hasErrors('prepTime')}"
+                                         th:each="error : ${#fields.errors('prepTime')}"
+                                         th:text="${error}"
+                                         th:class="invalid-feedback">
+                                        prepTime Error</div>
                                 </div>
                                 <div class="col-3">
                                     <label for="difficulty" class="fw-bold">Difficulty:</label>
@@ -100,13 +120,23 @@
                                     <label for="cookTime" class="fw-bold">Cook Time:</label>
                                 </div>
                                 <div class="col-3">
-                                    <input th:field="*{cookTime}" type="text" class="form-control" id="cookTime">
+                                    <input th:field="*{cookTime}" th:errorclass="is-invalid" type="text" class="form-control" id="cookTime">
+                                    <div th:if="${#fields.hasErrors('cookTime')}"
+                                         th:each="error : ${#fields.errors('cookTime')}"
+                                         th:text="${error}"
+                                         th:class="invalid-feedback">
+                                        cookTime Error</div>
                                 </div>
                                 <div class="col-3">
                                     <label for="servings" class="fw-bold">Servings:</label>
                                 </div>
                                 <div class="col-3">
-                                    <input th:field="*{servings}" type="text" class="form-control" id="servings">
+                                    <input th:field="*{servings}" th:errorclass="is-invalid" type="text" class="form-control" id="servings">
+                                    <div th:if="${#fields.hasErrors('servings')}"
+                                         th:each="error : ${#fields.errors('servings')}"
+                                         th:text="${error}"
+                                         th:class="invalid-feedback">
+                                        servings Error</div>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -120,7 +150,12 @@
                                     <label for="url" class="fw-bold">URL:</label>
                                 </div>
                                 <div class="col-3">
-                                    <input th:field="*{url}" type="text" class="form-control" id="url">
+                                    <input th:field="*{url}" th:errorclass="is-invalid" type="text" class="form-control" id="url">
+                                    <div th:if="${#fields.hasErrors('url')}"
+                                         th:each="error : ${#fields.errors('url')}"
+                                         th:text="${error}"
+                                         th:class="invalid-feedback">
+                                        url Error</div>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +202,12 @@
                             <label for="direction">Directions</label>
                         </div>
                         <div class="card-body">
-                            <textarea th:field="*{directions}" class="form-control" id="direction" rows="5"></textarea>
+                            <textarea th:field="*{directions}" th:errorclass="is-invalid" class="form-control" id="direction" rows="5"></textarea>
+                            <div th:if="${#fields.hasErrors('directions')}"
+                                 th:each="error : ${#fields.errors('directions')}"
+                                 th:text="${error}"
+                                 th:class="invalid-feedback">
+                                directions Error</div>
                         </div>
                     </div>
                 </div>

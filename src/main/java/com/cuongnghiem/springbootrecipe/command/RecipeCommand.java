@@ -4,7 +4,12 @@ import com.cuongnghiem.springbootrecipe.model.Difficulty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,13 +18,31 @@ import java.util.Set;
 @NoArgsConstructor
 public class RecipeCommand {
     private Long id;
+
+    @NotBlank(message = "Description must not be empty")
+    @Size(min = 3, max = 255, message = "Description length must between 3 and 255")
     private String description;
+
+    @Min(value = 1, message = "Prepare time must be bigger than 0")
+    @Max(value = 999, message = "Prepare time must be smaller than 1000")
     private Integer prepTime;
+
+    @Min(value = 1, message = "Cook time must be bigger than 0")
+    @Max(value = 999, message = "Cook time must be smaller than 1000")
     private Integer cookTime;
+
+    @Min(value = 1, message = "Servings must be bigger than 0")
+    @Max(value = 100, message = "Servings must be smaller than 101")
     private Integer servings;
+
     private String source;
+
+    @URL(message = "Please enter valid URL")
     private String url;
+
+    @NotBlank(message = "Directions must not be empty")
     private String directions;
+
     private Set<IngredientCommand> ingredients = new HashSet<>();
     private byte[] image;
     private Difficulty difficulty;

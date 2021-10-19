@@ -10,8 +10,10 @@ import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @Slf4j
@@ -19,6 +21,7 @@ import java.util.Set;
 @RequestMapping({"/recipe"})
 public class RecipeController {
 
+    public static final String RECIPE_NEW_OR_UPDATE = "recipe/new_or_update";
     private final RecipeService recipeService;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
     private final CategoryService categoryService;
@@ -47,7 +50,7 @@ public class RecipeController {
         model.addAttribute("recipe", new RecipeCommand());
         model.addAttribute("listCategory", categoryCommands);
 
-        return "recipe/new_or_update";
+        return RECIPE_NEW_OR_UPDATE;
     }
 
     @GetMapping("/{id}/update")
@@ -60,18 +63,32 @@ public class RecipeController {
             model.addAttribute("recipe", recipeCommand);
             model.addAttribute("listCategory", categoryCommands);
 
-            return "recipe/new_or_update";
+            return RECIPE_NEW_OR_UPDATE;
         }
        throw new NotFoundException("Recipe not found, id = " + id);
     }
 
-    @PostMapping({"", "/"})
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command,
-                               @RequestParam(value = "cats", required = false) Set<Long> cats){
+    @PostMapping("")
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command,
+                               BindingResult bindingResult,
+                               @RequestParam(value = "cats", required = false) Set<Long> cats,
+                               Model model
+                               ){
         if (cats != null)
             cats.forEach(catId -> {
                 command.getCategories().add(categoryService.findById(catId));
             });
+
+        if (bindingResult.hasErrors()) {
+            Set<CategoryCommand> categoryCommands =
+                    categoryService.getAllCategoryCommand();
+            model.addAttribute("listCategory", categoryCommands);
+
+            RecipeCommand fullRecipe = recipeService.getRecipeCommandById(command.getId());
+            command.setIngredients(fullRecipe.getIngredients());
+            return RECIPE_NEW_OR_UPDATE;
+        }
+
         RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + recipeCommand.getId() + "/show";
