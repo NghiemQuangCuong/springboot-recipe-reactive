@@ -6,6 +6,7 @@ import com.cuongnghiem.springbootrecipe.converters.CategoryCommandToCategory;
 import com.cuongnghiem.springbootrecipe.converters.NotesCommandToNotes;
 import com.cuongnghiem.springbootrecipe.converters.RecipeCommandToRecipe;
 import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
+import com.cuongnghiem.springbootrecipe.exception.NotFoundException;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -97,5 +98,7 @@ public class RecipeServiceImpl implements RecipeService {
     public void deleteById(Long id) {
         if (recipeRepository.findById(id).isPresent())
             recipeRepository.deleteById(id);
+        else
+            throw new NotFoundException("Recipe not found, id = " + id);
     }
 }

@@ -3,13 +3,16 @@ package com.cuongnghiem.springbootrecipe.controllers;
 import com.cuongnghiem.springbootrecipe.command.IngredientCommand;
 import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
 import com.cuongnghiem.springbootrecipe.command.UnitOfMeasureCommand;
+import com.cuongnghiem.springbootrecipe.exception.NotFoundException;
 import com.cuongnghiem.springbootrecipe.services.IngredientService;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import com.cuongnghiem.springbootrecipe.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
 
@@ -30,67 +33,53 @@ public class IngredientController {
 
     @GetMapping("/{id}/ingredient/show")
     public String showIngredients(@PathVariable String id, Model model) {
-        try {
-            RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
-            if (recipeCommand != null) {
-                model.addAttribute("recipe", recipeCommand);
-                return "recipe/ingredient/show";
-            }
-            return "404";
-        } catch (NumberFormatException exception) {
-            return "404";
+        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
+        if (recipeCommand != null) {
+            model.addAttribute("recipe", recipeCommand);
+            return "recipe/ingredient/show";
         }
+        throw new NotFoundException("Recipe not found, id = " + id);
     }
 
     @GetMapping("/{recipeId}/ingredient/{ingredientId}/show")
     public String viewIngredient(@PathVariable String recipeId,
                                  @PathVariable String ingredientId,
                                  Model model) {
-        try {
-            IngredientCommand ingredientCommand =
-                    ingredientService.findCommandByIdWithRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
-            if (ingredientCommand != null) {
-                model.addAttribute("ingredient", ingredientCommand);
-                return "recipe/ingredient/view";
-            }
-            return "404";
-        } catch (NumberFormatException exception) {
-            return "404";
+        IngredientCommand ingredientCommand =
+                ingredientService.findCommandByIdWithRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+        if (ingredientCommand != null) {
+            model.addAttribute("ingredient", ingredientCommand);
+            return "recipe/ingredient/view";
         }
+        throw new NotFoundException("Ingredient with Recipe not found. ingredientId = "
+                + ingredientId + ", recipeId = " + recipeId);
     }
 
     @GetMapping("/{recipeId}/ingredient/{ingredientId}/update")
     public String getIngredientUpdate(@PathVariable String recipeId,
                                       @PathVariable String ingredientId,
                                       Model model) {
-        try {
-            IngredientCommand ingredientCommand
-                    = ingredientService.findCommandByIdWithRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
-            if (ingredientCommand != null) {
-                Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
+        IngredientCommand ingredientCommand
+                = ingredientService.findCommandByIdWithRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+        if (ingredientCommand != null) {
+            Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
-                model.addAttribute("ingredient", ingredientCommand);
-                model.addAttribute("listUOM", listUOM);
+            model.addAttribute("ingredient", ingredientCommand);
+            model.addAttribute("listUOM", listUOM);
 
-                return "recipe/ingredient/new_or_update";
-            }
-            return "404";
-        } catch (NumberFormatException exception) {
-            return "404";
+            return "recipe/ingredient/new_or_update";
         }
+        throw new NotFoundException("Ingredient with Recipe not found. ingredientId = "
+                + ingredientId + ", recipeId = " + recipeId);
     }
 
     @GetMapping("/{recipeId}/ingredient/new")
     public String newIngredient(@PathVariable String recipeId, Model model) {
         IngredientCommand ingredientCommand = new IngredientCommand();
-        try {
-            if (recipeService.getRecipeById(Long.valueOf(recipeId)) == null)
-                return "404";
+        if (recipeService.getRecipeById(Long.valueOf(recipeId)) == null)
+            throw new NotFoundException("Recipe not found, id = " + recipeId);
 
-            ingredientCommand.setRecipeId(Long.valueOf(recipeId));
-        } catch (NumberFormatException exception) {
-            return "404";
-        }
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
 
         Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
@@ -116,13 +105,25 @@ public class IngredientController {
     @PostMapping("/{recipeId}/ingredient/{ingredientId}/delete")
     public String deleteIngredient(@PathVariable String recipeId,
                                    @PathVariable String ingredientId) {
-        try {
-            ingredientService.deleteByIdAndRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
-            return "redirect:/recipe/" + recipeId + "/ingredient/show";
-        } catch (NumberFormatException exception) {
-            return "404";
-        } catch (RuntimeException exception) {
-            return "404";
-        }
+        ingredientService.deleteByIdAndRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+        return "redirect:/recipe/" + recipeId + "/ingredient/show";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFound(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("404");
+        modelAndView.addObject("exception", exception);
+        return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleNumberFormatException(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("400");
+        modelAndView.addObject("exception", exception);
+        return modelAndView;
     }
 }

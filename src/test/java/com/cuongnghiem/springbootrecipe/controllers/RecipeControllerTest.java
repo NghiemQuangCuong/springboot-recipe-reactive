@@ -105,7 +105,7 @@ class RecipeControllerTest {
     void testDeleteRecipeWithInvalidId() throws Exception {
         mockMvc.perform(post("/recipe/abcxyz/delete")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isOk())
-                .andExpect(view().name("404"));
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400"));
     }
 }

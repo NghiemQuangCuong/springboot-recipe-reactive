@@ -3,6 +3,7 @@ package com.cuongnghiem.springbootrecipe.services;
 import com.cuongnghiem.springbootrecipe.command.IngredientCommand;
 import com.cuongnghiem.springbootrecipe.converters.IngredientCommandToIngredient;
 import com.cuongnghiem.springbootrecipe.converters.IngredientToIngredientCommand;
+import com.cuongnghiem.springbootrecipe.exception.NotFoundException;
 import com.cuongnghiem.springbootrecipe.model.Ingredient;
 import com.cuongnghiem.springbootrecipe.repositories.IngredientRepository;
 import com.cuongnghiem.springbootrecipe.repositories.RecipeRepository;
@@ -66,7 +67,8 @@ public class IngredientServiceImpl implements IngredientService{
         Ingredient ingredient =
                 ingredientRepository.findByRecipe_IdAndId(recipeId, id).orElse(null);
         if (ingredient == null)
-            throw new RuntimeException("Cannot find ingredient");
+            throw new NotFoundException("Cannot find ingredient with recipe. ingredientId = " + id
+            + ", recipeId = " + recipeId);
 
         ingredientRepository.delete(ingredient);
     }
