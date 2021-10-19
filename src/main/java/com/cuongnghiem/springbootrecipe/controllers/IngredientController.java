@@ -8,11 +8,9 @@ import com.cuongnghiem.springbootrecipe.services.IngredientService;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
 import com.cuongnghiem.springbootrecipe.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
 
@@ -107,23 +105,5 @@ public class IngredientController {
                                    @PathVariable String ingredientId) {
         ingredientService.deleteByIdAndRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
         return "redirect:/recipe/" + recipeId + "/ingredient/show";
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("404");
-        modelAndView.addObject("exception", exception);
-        return modelAndView;
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView handleNumberFormatException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("400");
-        modelAndView.addObject("exception", exception);
-        return modelAndView;
     }
 }
