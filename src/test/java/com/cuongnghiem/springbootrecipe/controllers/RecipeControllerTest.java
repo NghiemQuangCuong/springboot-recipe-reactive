@@ -85,9 +85,11 @@ class RecipeControllerTest {
     @Test
     void testPostNewRecipeFail() throws Exception{
 
+        when(recipeService.getRecipeCommandById(any())).thenReturn(new RecipeCommand());
+
         mockMvc.perform(post("/recipe")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("id", ""))
+                        .param("id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/new_or_update"));
     }
