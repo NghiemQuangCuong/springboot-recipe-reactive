@@ -37,7 +37,7 @@ public class ImageController {
         if (recipeService.getRecipeById(Long.valueOf(recipeId)) == null)
             throw new NotFoundException("Recipe not found, recipeId = " +recipeId);
         model.addAttribute("recipeId", Long.valueOf(recipeId));
-        return "/recipe/image/upload";
+        return "recipe/image/upload";
     }
 
     @PostMapping("/{recipeId}/image")
