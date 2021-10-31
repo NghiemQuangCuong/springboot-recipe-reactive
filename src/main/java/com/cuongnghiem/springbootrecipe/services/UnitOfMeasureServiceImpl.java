@@ -21,7 +21,7 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService{
     }
 
     @Override
-    public UnitOfMeasure getUOMById(Long id) {
+    public UnitOfMeasure getUOMById(String id) {
         return unitOfMeasureRepository.findById(id).orElse(null);
     }
 

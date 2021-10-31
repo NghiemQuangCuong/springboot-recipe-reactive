@@ -3,8 +3,8 @@ package com.cuongnghiem.springbootrecipe.services;
 import com.cuongnghiem.springbootrecipe.command.IngredientCommand;
 
 public interface IngredientService {
-    IngredientCommand findIngredientCommandById(Long id);
-    IngredientCommand findCommandByIdWithRecipeId(Long id, Long recipeId);
+    IngredientCommand findIngredientCommandById(String id);
+    IngredientCommand findCommandByIdWithRecipeId(String id, String recipeId);
     IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand);
-    void deleteByIdAndRecipeId(Long id, Long recipeId);
+    void deleteByIdAndRecipeId(String id, String recipeId);
 }

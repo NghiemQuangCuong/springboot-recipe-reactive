@@ -31,7 +31,7 @@ public class IngredientController {
 
     @GetMapping("/{id}/ingredient/show")
     public String showIngredients(@PathVariable String id, Model model) {
-        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
+        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(id);
         if (recipeCommand != null) {
             model.addAttribute("recipe", recipeCommand);
             return "recipe/ingredient/show";
@@ -44,7 +44,7 @@ public class IngredientController {
                                  @PathVariable String ingredientId,
                                  Model model) {
         IngredientCommand ingredientCommand =
-                ingredientService.findCommandByIdWithRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+                ingredientService.findCommandByIdWithRecipeId(ingredientId, recipeId);
         if (ingredientCommand != null) {
             model.addAttribute("ingredient", ingredientCommand);
             return "recipe/ingredient/view";
@@ -58,7 +58,7 @@ public class IngredientController {
                                       @PathVariable String ingredientId,
                                       Model model) {
         IngredientCommand ingredientCommand
-                = ingredientService.findCommandByIdWithRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+                = ingredientService.findCommandByIdWithRecipeId(ingredientId, recipeId);
         if (ingredientCommand != null) {
             Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
@@ -74,10 +74,10 @@ public class IngredientController {
     @GetMapping("/{recipeId}/ingredient/new")
     public String newIngredient(@PathVariable String recipeId, Model model) {
         IngredientCommand ingredientCommand = new IngredientCommand();
-        if (recipeService.getRecipeById(Long.valueOf(recipeId)) == null)
+        if (recipeService.getRecipeById(recipeId) == null)
             throw new NotFoundException("Recipe not found, id = " + recipeId);
 
-        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setRecipeId(recipeId);
 
         Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
@@ -103,7 +103,7 @@ public class IngredientController {
     @PostMapping("/{recipeId}/ingredient/{ingredientId}/delete")
     public String deleteIngredient(@PathVariable String recipeId,
                                    @PathVariable String ingredientId) {
-        ingredientService.deleteByIdAndRecipeId(Long.valueOf(ingredientId), Long.valueOf(recipeId));
+        ingredientService.deleteByIdAndRecipeId(ingredientId, recipeId);
         return "redirect:/recipe/" + recipeId + "/ingredient/show";
     }
 }

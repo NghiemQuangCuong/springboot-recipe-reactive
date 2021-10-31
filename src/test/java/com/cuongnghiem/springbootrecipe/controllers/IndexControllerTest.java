@@ -37,7 +37,7 @@ class IndexControllerTest {
     @Mock
     private Model model;
 
-    private Long newRecipeCommandId = 1L;
+    private String newRecipeCommandId = "1L";
 
     @BeforeEach
     void setUp() {
@@ -57,10 +57,10 @@ class IndexControllerTest {
         //given
         Set<Recipe> recipeSet = new HashSet<>();
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1L");
         recipeSet.add(recipe);
         Recipe recipe1 = new Recipe();
-        recipe1.setId(2L);
+        recipe1.setId("2L");
         recipeSet.add(recipe1);
 
         when(recipeService.getRecipes()).thenReturn(recipeSet);
@@ -77,12 +77,12 @@ class IndexControllerTest {
         assertEquals("index", result);
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), setArgumentCaptor.capture());
-        assertEquals(2, setArgumentCaptor.getValue().size());
+        assertEquals(1, setArgumentCaptor.getValue().size());
     }
 
     private RecipeCommand newRecipeCommand() {
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(newRecipeCommandId++);
+        recipeCommand.setId(newRecipeCommandId + "a");
         return recipeCommand;
     }
 }

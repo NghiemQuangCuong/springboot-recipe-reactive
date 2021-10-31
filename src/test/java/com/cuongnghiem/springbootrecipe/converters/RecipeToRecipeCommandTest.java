@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RecipeToRecipeCommandTest {
-    public static final Long ID = 1L;
+    public static final String ID = "1L";
     public static final String DESCRIPTION = "description";
     public static final Integer PREPTIME = 12;
     public static final Integer COOKTIME = 23;

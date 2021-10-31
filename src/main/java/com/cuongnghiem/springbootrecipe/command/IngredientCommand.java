@@ -1,20 +1,20 @@
 package com.cuongnghiem.springbootrecipe.command;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class IngredientCommand {
-    private Long id;
+
+    private String id;
     private String description;
     private BigDecimal amount;
     private UnitOfMeasureCommand uom;
-    private Long recipeId;
+    private String recipeId;
 
     public String toIngredientString() {
         String amountString;

@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * Created by cuongnghiem on 28/09/2021
  **/
 
-public interface NotesRepository extends CrudRepository<Notes, Long> {
+public interface NotesRepository extends CrudRepository<Notes, String> {
 }

@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryCommand findById(Long id) {
+    public CategoryCommand findById(String id) {
         Category category = categoryRepository.findById(id).orElse(null);
         if (category == null)
             throw new RuntimeException("Cannot find category id: " + id);

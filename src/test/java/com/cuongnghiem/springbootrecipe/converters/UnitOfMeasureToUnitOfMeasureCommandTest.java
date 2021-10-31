@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UnitOfMeasureToUnitOfMeasureCommandTest {
-    private static final Long ID = 1L;
+    private static final String ID = "1L";
     private static final String DESCRIPTION = "Description";
 
     UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;

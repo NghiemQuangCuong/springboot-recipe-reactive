@@ -1,9 +1,7 @@
 package com.cuongnghiem.springbootrecipe.command;
 
 import com.cuongnghiem.springbootrecipe.model.Difficulty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Max;
@@ -13,11 +11,12 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RecipeCommand {
-    private Long id;
+    private String id;
 
     @NotBlank(message = "Description must not be empty")
     @Size(min = 3, max = 255, message = "Description length must between 3 and 255")

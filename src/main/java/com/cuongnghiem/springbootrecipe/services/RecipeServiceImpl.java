@@ -52,13 +52,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public Recipe getRecipeById(Long id) {
+    public Recipe getRecipeById(String id) {
         return recipeRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
-    public RecipeCommand getRecipeCommandById(Long id) {
+    public RecipeCommand getRecipeCommandById(String id) {
         Recipe recipe = recipeRepository.findById(id).orElse(null);
         if (recipe == null)
             return null;
@@ -95,7 +95,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         if (recipeRepository.findById(id).isPresent())
             recipeRepository.deleteById(id);
         else

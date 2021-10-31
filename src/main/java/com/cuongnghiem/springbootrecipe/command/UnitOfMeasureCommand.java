@@ -2,12 +2,11 @@ package com.cuongnghiem.springbootrecipe.command;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UnitOfMeasureCommand {
-    private Long id;
+    private String id;
     private String description;
 }

@@ -33,7 +33,7 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    public IngredientCommand findIngredientCommandById(Long id) {
+    public IngredientCommand findIngredientCommandById(String id) {
         Ingredient ingredient = ingredientRepository.findById(id).orElse(null);
         if (ingredient == null)
             return null;
@@ -41,7 +41,7 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    public IngredientCommand findCommandByIdWithRecipeId(Long id, Long recipeId) {
+    public IngredientCommand findCommandByIdWithRecipeId(String id, String recipeId) {
         Ingredient ingredient = ingredientRepository.findByRecipe_IdAndId(recipeId, id).orElse(null);
         if (ingredient == null)
             return null;
@@ -63,7 +63,7 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    public void deleteByIdAndRecipeId(Long id, Long recipeId) {
+    public void deleteByIdAndRecipeId(String id, String recipeId) {
         Ingredient ingredient =
                 ingredientRepository.findByRecipe_IdAndId(recipeId, id).orElse(null);
         if (ingredient == null)

@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,10 +46,10 @@ class RecipeControllerTest {
 
     @Test
     void getRecipe() throws Exception{
-        Recipe recipe = Recipe.builder().id(1L).build();
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        Recipe recipe = Recipe.builder().id("1L").build();
+        when(recipeService.getRecipeById(anyString())).thenReturn(recipe);
 
-        mockMvc.perform(get("/recipe/1/show"))
+        mockMvc.perform(get("/recipe/1L/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"));
     }
@@ -69,7 +68,7 @@ class RecipeControllerTest {
     @Test
     void testPostNewRecipe() throws Exception{
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId("1L");
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(recipeCommand);
 
@@ -79,7 +78,7 @@ class RecipeControllerTest {
                 .param("description", "some String")
                 .param("directions", "Some Directions"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/1/show"));
+                .andExpect(view().name("redirect:/recipe/1L/show"));
     }
 
     @Test
@@ -97,12 +96,12 @@ class RecipeControllerTest {
     @Test
     void testGetUpdateRecipe() throws Exception {
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId("1L");
 
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(recipeCommand);
         when(categoryService.getAllCategoryCommand()).thenReturn(new HashSet<>());
 
-        mockMvc.perform(get("/recipe/1/update"))
+        mockMvc.perform(get("/recipe/1L/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/new_or_update"))
                 .andExpect(model().attributeExists("recipe"));
@@ -110,17 +109,9 @@ class RecipeControllerTest {
 
     @Test
     void testDeleteRecipeWithValidId() throws Exception {
-        mockMvc.perform(post("/recipe/1/delete")
+        mockMvc.perform(post("/recipe/1L/delete")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
-    }
-
-    @Test
-    void testDeleteRecipeWithInvalidId() throws Exception {
-        mockMvc.perform(post("/recipe/abcxyz/delete")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400"));
     }
 }

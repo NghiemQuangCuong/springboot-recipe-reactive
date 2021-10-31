@@ -2,12 +2,11 @@ package com.cuongnghiem.springbootrecipe.command;
 
 import lombok.*;
 
-@EqualsAndHashCode
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CategoryCommand {
-    private Long id;
+    private String id;
     private String description;
 }

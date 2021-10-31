@@ -9,6 +9,6 @@ import java.util.Set;
  **/
 
 public interface CategoryService {
-    CategoryCommand findById(Long id);
+    CategoryCommand findById(String id);
     Set<CategoryCommand> getAllCategoryCommand();
 }

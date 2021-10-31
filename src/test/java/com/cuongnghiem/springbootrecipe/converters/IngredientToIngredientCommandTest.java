@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class IngredientToIngredientCommandTest {
 
-    public static final Long ID = 1L;
+    public static final String ID = "1L";
     public static final String DESCRIPTION = "Description";
     public static final BigDecimal AMOUNT = BigDecimal.TEN;
     public static final UnitOfMeasure UOM = new UnitOfMeasure();

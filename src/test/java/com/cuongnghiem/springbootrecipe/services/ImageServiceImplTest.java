@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,9 +37,9 @@ class ImageServiceImplTest {
         Recipe recipe = new Recipe();
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        when(recipeService.getRecipeById(anyString())).thenReturn(recipe);
 
-        imageService.saveImageFile(1L, multipartFile);
+        imageService.saveImageFile("1L", multipartFile);
 
         verify(recipeService).save(argumentCaptor.capture());
 

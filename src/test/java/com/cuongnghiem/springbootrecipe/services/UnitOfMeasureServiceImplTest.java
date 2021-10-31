@@ -35,9 +35,9 @@ class UnitOfMeasureServiceImplTest {
     @Test
     void getAllUoMCommand() {
         Set<UnitOfMeasure> unitOfMeasureSet = new HashSet<>();
-        UnitOfMeasure uom1 = new UnitOfMeasure(); uom1.setId(1L);
-        UnitOfMeasure uom2 = new UnitOfMeasure(); uom2.setId(2L);
-        UnitOfMeasure uom3 = new UnitOfMeasure(); uom3.setId(3L);
+        UnitOfMeasure uom1 = new UnitOfMeasure(); uom1.setId("1L");
+        UnitOfMeasure uom2 = new UnitOfMeasure(); uom2.setId("2L");
+        UnitOfMeasure uom3 = new UnitOfMeasure(); uom3.setId("3L");
         unitOfMeasureSet.add(uom1); unitOfMeasureSet.add(uom2); unitOfMeasureSet.add(uom3);
 
         when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasureSet);

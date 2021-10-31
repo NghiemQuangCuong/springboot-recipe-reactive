@@ -34,7 +34,7 @@ public class RecipeController {
 
     @GetMapping({"/{id}/show"})
     public String getRecipe(@PathVariable String id, Model model) {
-        Recipe recipe = recipeService.getRecipeById(Long.valueOf(id));
+        Recipe recipe = recipeService.getRecipeById(id);
         if (recipe != null) {
             model.addAttribute("recipe", recipeToRecipeCommand.convert(recipe));
             return "recipe/show";
@@ -55,7 +55,7 @@ public class RecipeController {
 
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
-        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
+        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(id);
         if (recipeCommand != null) {
             Set<CategoryCommand> categoryCommands =
                     categoryService.getAllCategoryCommand();
@@ -71,7 +71,7 @@ public class RecipeController {
     @PostMapping("")
     public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command,
                                BindingResult bindingResult,
-                               @RequestParam(value = "cats", required = false) Set<Long> cats,
+                               @RequestParam(value = "cats", required = false) Set<String> cats,
                                Model model
                                ){
         if (cats != null)
@@ -96,7 +96,7 @@ public class RecipeController {
 
     @PostMapping("/{id}/delete")
     public String deleteRecipe(@PathVariable String id) {
-        recipeService.deleteById(Long.valueOf(id));
+        recipeService.deleteById(id);
         return "redirect:/";
     }
 }

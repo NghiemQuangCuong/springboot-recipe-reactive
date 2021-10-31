@@ -1,26 +1,18 @@
 package com.cuongnghiem.springbootrecipe.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by cuongnghiem on 25/09/2021
  **/
-@Data
-@EqualsAndHashCode(exclude = {"recipe"})
-@Entity
+
+@Getter
+@Setter
 public class Notes {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne
+    private String id;
     private Recipe recipe;
-
-    @Lob
     private String recipeNotes;
 
 }

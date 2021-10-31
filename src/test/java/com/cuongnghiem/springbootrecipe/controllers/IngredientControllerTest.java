@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,9 +46,9 @@ class IngredientControllerTest {
     void viewIngredienstOfARecipe() throws Exception {
         RecipeCommand recipeCommand = new RecipeCommand();
 
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(recipeCommand);
 
-        mockMvc.perform(get("/recipe/1/ingredient/show"))
+        mockMvc.perform(get("/recipe/1L/ingredient/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/show"))
                 .andExpect(model().attributeExists("recipe"));
@@ -59,9 +58,9 @@ class IngredientControllerTest {
     void viewAnIngredient() throws Exception {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
-        when(ingredientService.findCommandByIdWithRecipeId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+        when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString())).thenReturn(ingredientCommand);
 
-        mockMvc.perform(get("/recipe/1/ingredient/1/show"))
+        mockMvc.perform(get("/recipe/1L/ingredient/1L/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/view"))
                 .andExpect(model().attributeExists("ingredient"));
@@ -71,10 +70,10 @@ class IngredientControllerTest {
     void getUpdateViewOfAnIngredient() throws Exception {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
-        when(ingredientService.findCommandByIdWithRecipeId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+        when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString())).thenReturn(ingredientCommand);
         when(uomService.getAllUoMCommand()).thenReturn(new HashSet<>());
 
-        mockMvc.perform(get("/recipe/1/ingredient/1/update"))
+        mockMvc.perform(get("/recipe/1L/ingredient/1L/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/new_or_update"))
                 .andExpect(model().attributeExists("ingredient"))
@@ -84,24 +83,24 @@ class IngredientControllerTest {
     @Test
     void saveOrUpdate() throws Exception {
         IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setId(2L);
-        ingredientCommand.setRecipeId(3L);
+        ingredientCommand.setId("2L");
+        ingredientCommand.setRecipeId("3L");
 
         when(ingredientService.saveIngredientCommand(any())).thenReturn(ingredientCommand);
 
         mockMvc.perform(post("/recipe/ingredient/update")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/3/ingredient/2/show"));
+                .andExpect(view().name("redirect:/recipe/3L/ingredient/2L/show"));
     }
 
     @Test
     void newIngredient() throws Exception {
 
-        when(recipeService.getRecipeById(anyLong())).thenReturn(new Recipe());
+        when(recipeService.getRecipeById(anyString())).thenReturn(new Recipe());
         when(uomService.getAllUoMCommand()).thenReturn(new HashSet<>());
 
-        mockMvc.perform(get("/recipe/1/ingredient/new"))
+        mockMvc.perform(get("/recipe/1L/ingredient/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/new_or_update"))
                 .andExpect(model().attributeExists("ingredient"))
@@ -111,9 +110,9 @@ class IngredientControllerTest {
     @Test
     void deleteIngredient() throws Exception {
 
-        mockMvc.perform(post("/recipe/1/ingredient/1/delete")
+        mockMvc.perform(post("/recipe/1L/ingredient/1L/delete")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/1/ingredient/show"));
+                .andExpect(view().name("redirect:/recipe/1L/ingredient/show"));
     }
 }

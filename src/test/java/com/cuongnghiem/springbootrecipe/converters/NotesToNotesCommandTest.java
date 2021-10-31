@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NotesToNotesCommandTest {
 
-    private static final Long ID = 1L;
+    private static final String ID = "1L";
     private static final String RECIPE_NOTES = "Recipenotes";
     NotesToNotesCommand notesToNotesCommand;
 

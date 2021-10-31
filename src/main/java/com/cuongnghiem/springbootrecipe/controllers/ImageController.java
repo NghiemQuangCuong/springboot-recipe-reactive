@@ -34,22 +34,22 @@ public class ImageController {
 
     @GetMapping("/{recipeId}/image/upload")
     public String getUploadImageForm(@PathVariable String recipeId, Model model) {
-        if (recipeService.getRecipeById(Long.valueOf(recipeId)) == null)
+        if (recipeService.getRecipeById(recipeId) == null)
             throw new NotFoundException("Recipe not found, recipeId = " +recipeId);
-        model.addAttribute("recipeId", Long.valueOf(recipeId));
+        model.addAttribute("recipeId", recipeId);
         return "recipe/image/upload";
     }
 
     @PostMapping("/{recipeId}/image")
     public String saveImage(@PathVariable String recipeId,
                             @RequestParam("imageFile") MultipartFile file) throws IOException {
-        imageService.saveImageFile(Long.valueOf(recipeId), file);
+        imageService.saveImageFile(recipeId, file);
         return "redirect:/recipe/" + recipeId + "/show";
     }
 
     @GetMapping("/{recipeId}/imageFile")
     public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
-        byte[] image = recipeService.getRecipeById(Long.valueOf(recipeId)).getImage();
+        byte[] image = recipeService.getRecipeById(recipeId).getImage();
         if (image == null)
             return ;
         response.setContentType("image/*");

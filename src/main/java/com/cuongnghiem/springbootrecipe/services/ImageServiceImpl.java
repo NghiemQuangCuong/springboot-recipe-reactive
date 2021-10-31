@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void saveImageFile(Long recipeId, MultipartFile file) throws IOException {
+    public void saveImageFile(String recipeId, MultipartFile file) throws IOException {
         Recipe recipe = recipeService.getRecipeById(recipeId);
         if (recipe == null)
             throw new RuntimeException("Cannot find recipe id = " + recipeId);

@@ -6,6 +6,6 @@ import com.cuongnghiem.springbootrecipe.model.UnitOfMeasure;
 import java.util.Set;
 
 public interface UnitOfMeasureService {
-    UnitOfMeasure getUOMById(Long id);
+    UnitOfMeasure getUOMById(String id);
     Set<UnitOfMeasureCommand> getAllUoMCommand();
 }
