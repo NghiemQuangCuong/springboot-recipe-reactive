@@ -1,6 +1,9 @@
 package com.cuongnghiem.springbootrecipe.model;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,8 +16,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Document
 public class Recipe {
 
+    @Id
     private String id;
     private String description;
     private Integer prepTime;
@@ -27,12 +32,11 @@ public class Recipe {
     private byte[] image;
     private Difficulty difficulty;
     private Notes notes;
+    @DBRef
     private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {
         this.notes = notes;
-        if (notes != null)
-            notes.setRecipe(this);
     }
 
     public Recipe addIngredient(Ingredient ingredient){

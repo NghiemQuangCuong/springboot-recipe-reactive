@@ -56,6 +56,8 @@ public class IngredientServiceImpl implements IngredientService{
             ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()));
             ingredientRepository.save(ingredient);
 
+
+
             return ingredientToIngredientCommand.convert(ingredient);
         } catch (RuntimeException exception) {
             return null;
