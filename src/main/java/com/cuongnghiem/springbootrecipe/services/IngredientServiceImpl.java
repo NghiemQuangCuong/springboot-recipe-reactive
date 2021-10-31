@@ -5,6 +5,7 @@ import com.cuongnghiem.springbootrecipe.converters.IngredientCommandToIngredient
 import com.cuongnghiem.springbootrecipe.converters.IngredientToIngredientCommand;
 import com.cuongnghiem.springbootrecipe.exception.NotFoundException;
 import com.cuongnghiem.springbootrecipe.model.Ingredient;
+import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.repositories.IngredientRepository;
 import com.cuongnghiem.springbootrecipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +57,10 @@ public class IngredientServiceImpl implements IngredientService{
             ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()));
             ingredientRepository.save(ingredient);
 
-
+            Recipe recipe = recipeService.getRecipeById(ingredientCommand.getRecipeId());
+            recipe.getIngredients().removeIf(ingredient1 -> ingredient1.getId().equals(ingredient.getId()));
+            recipe.getIngredients().add(ingredient);
+            recipeRepository.save(recipe);
 
             return ingredientToIngredientCommand.convert(ingredient);
         } catch (RuntimeException exception) {
@@ -71,6 +75,10 @@ public class IngredientServiceImpl implements IngredientService{
         if (ingredient == null)
             throw new NotFoundException("Cannot find ingredient with recipe. ingredientId = " + id
             + ", recipeId = " + recipeId);
+
+        Recipe recipe = recipeService.getRecipeById(recipeId);
+        recipe.getIngredients().removeIf(ingredient1 -> ingredient1.getId().equals(ingredient.getId()));
+        recipeRepository.save(recipe);
 
         ingredientRepository.delete(ingredient);
     }
