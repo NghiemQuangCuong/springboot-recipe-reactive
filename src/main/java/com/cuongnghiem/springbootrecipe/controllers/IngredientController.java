@@ -33,12 +33,10 @@ public class IngredientController {
 
     @GetMapping("/{id}/ingredient/show")
     public String showIngredients(@PathVariable String id, Model model) {
-        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(id);
-        if (recipeCommand != null) {
-            model.addAttribute("recipe", recipeCommand);
-            return "recipe/ingredient/show";
-        }
-        throw new NotFoundException("Recipe not found, id = " + id);
+        Mono<RecipeCommand> recipeCommand = recipeService.getRecipeCommandById(id);
+        model.addAttribute("recipe", recipeCommand.block());
+        return "recipe/ingredient/show";
+
     }
 
     @GetMapping("/{recipeId}/ingredient/{ingredientId}/show")

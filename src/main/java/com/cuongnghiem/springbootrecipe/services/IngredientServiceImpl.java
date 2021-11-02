@@ -52,12 +52,12 @@ public class IngredientServiceImpl implements IngredientService{
     public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand ingredientCommand) {
 
         Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
-        ingredient.setRecipe(recipeService.getRecipeById(ingredientCommand.getRecipeId()));
+        ingredient.setRecipe(recipeService.getRecipeById(ingredientCommand.getRecipeId()).block());
         ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()).block());
         Mono<IngredientCommand> result = ingredientRepository
                 .save(ingredient).map(ingredientToIngredientCommand::convert);
 
-        Recipe recipe = recipeService.getRecipeById(ingredientCommand.getRecipeId());
+        Recipe recipe = recipeService.getRecipeById(ingredientCommand.getRecipeId()).block();
         recipe.getIngredients().removeIf(ingredient1 -> ingredient1.getId().equals(ingredient.getId()));
         recipe.getIngredients().add(ingredient);
         recipeRepository.save(recipe).block();
@@ -72,7 +72,7 @@ public class IngredientServiceImpl implements IngredientService{
             throw new NotFoundException("Cannot find ingredient with recipe. ingredientId = " + id
             + ", recipeId = " + recipeId);
 
-        Recipe recipe = recipeService.getRecipeById(recipeId);
+        Recipe recipe = recipeService.getRecipeById(recipeId).block();
         recipe.getIngredients().removeIf(ingredient1 -> ingredient1.getId().equals(ingredient.getId()));
         recipeRepository.save(recipe).block();
 

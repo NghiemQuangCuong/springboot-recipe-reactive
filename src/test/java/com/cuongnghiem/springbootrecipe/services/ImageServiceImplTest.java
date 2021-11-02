@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +38,7 @@ class ImageServiceImplTest {
         Recipe recipe = new Recipe();
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 
-        when(recipeService.getRecipeById(anyString())).thenReturn(recipe);
+        when(recipeService.getRecipeById(anyString())).thenReturn(Mono.just(recipe));
 
         imageService.saveImageFile("1L", multipartFile);
 

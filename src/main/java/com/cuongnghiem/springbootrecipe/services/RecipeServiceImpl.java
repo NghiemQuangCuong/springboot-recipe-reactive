@@ -8,10 +8,12 @@ import com.cuongnghiem.springbootrecipe.converters.RecipeCommandToRecipe;
 import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.exception.NotFoundException;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
-import com.cuongnghiem.springbootrecipe.repositories.RecipeRepository;
+import com.cuongnghiem.springbootrecipe.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,13 +25,13 @@ import java.util.Set;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeRepository;
     private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
     private final NotesCommandToNotes notesCommandToNotes;
     private final CategoryCommandToCategory categoryCommandToCategory;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand, NotesCommandToNotes notesCommandToNotes, CategoryCommandToCategory categoryCommandToCategory) {
+    public RecipeServiceImpl(RecipeReactiveRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand, NotesCommandToNotes notesCommandToNotes, CategoryCommandToCategory categoryCommandToCategory) {
         this.recipeRepository = recipeRepository;
         this.recipeCommandToRecipe = recipeCommandToRecipe;
         this.recipeToRecipeCommand = recipeToRecipeCommand;
@@ -38,43 +40,42 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe save(Recipe recipe) {
+    public Mono<Recipe> save(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
 
     @Override
     @Transactional
-    public Set<Recipe> getRecipes() {
-        Set<Recipe> recipeSet = new HashSet<>();
-        recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
-        return recipeSet;
+    public Flux<Recipe> getRecipes() {
+        return recipeRepository.findAll();
     }
 
     @Override
     @Transactional
-    public Recipe getRecipeById(String id) {
-        return recipeRepository.findById(id).orElse(null);
+    public Mono<Recipe> getRecipeById(String id) {
+        return recipeRepository.findById(id);
     }
 
     @Override
     @Transactional
-    public RecipeCommand getRecipeCommandById(String id) {
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe == null)
-            return null;
-        return recipeToRecipeCommand.convert(recipe);
+    public Mono<RecipeCommand> getRecipeCommandById(String id) {
+        return recipeRepository.findById(id)
+                .map(recipeToRecipeCommand::convert);
     }
 
     @Override
     @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+    public Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command) {
         if (command == null)
             return null;
 
-        Recipe availableRecipe = recipeRepository.findById(command.getId()).orElse(null);
+        Recipe availableRecipe = recipeRepository
+                .findById(command.getId())
+                .block();
+
         if (availableRecipe == null) {
-            Recipe recipe = recipeRepository.save(recipeCommandToRecipe.convert(command));
-            return recipeToRecipeCommand.convert(recipe);
+            return recipeRepository.save(recipeCommandToRecipe.convert(command))
+                    .map(recipeToRecipeCommand::convert);
         }
 
         availableRecipe.setUrl(command.getUrl());
@@ -90,15 +91,13 @@ public class RecipeServiceImpl implements RecipeService {
             availableRecipe.getCategories().add(categoryCommandToCategory.convert(categoryCommand));
         });
 
-        return recipeToRecipeCommand.convert(recipeRepository.save(availableRecipe));
+        return recipeRepository.save(availableRecipe)
+                .map(recipeToRecipeCommand::convert);
     }
 
     @Override
     @Transactional
     public void deleteById(String id) {
-        if (recipeRepository.findById(id).isPresent())
-            recipeRepository.deleteById(id);
-        else
-            throw new NotFoundException("Recipe not found, id = " + id);
+        recipeRepository.deleteById(id).block();
     }
 }

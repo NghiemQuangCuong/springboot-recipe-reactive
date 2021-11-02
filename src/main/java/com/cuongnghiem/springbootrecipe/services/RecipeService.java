@@ -2,6 +2,8 @@ package com.cuongnghiem.springbootrecipe.services;
 
 import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
@@ -10,10 +12,10 @@ import java.util.Set;
  */
 public interface RecipeService {
 
-    Recipe save(Recipe recipe);
-    Set<Recipe> getRecipes();
-    Recipe getRecipeById(String id);
-    RecipeCommand getRecipeCommandById(String id);
-    RecipeCommand saveRecipeCommand(RecipeCommand command);
+    Mono<Recipe> save(Recipe recipe);
+    Flux<Recipe> getRecipes();
+    Mono<Recipe> getRecipeById(String id);
+    Mono<RecipeCommand> getRecipeCommandById(String id);
+    Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command);
     void deleteById(String id);
 }

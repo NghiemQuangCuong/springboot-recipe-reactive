@@ -49,7 +49,7 @@ public class ImageController {
 
     @GetMapping("/{recipeId}/imageFile")
     public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
-        byte[] image = recipeService.getRecipeById(recipeId).getImage();
+        byte[] image = recipeService.getRecipeById(recipeId).block().getImage();
         if (image == null)
             return ;
         response.setContentType("image/*");

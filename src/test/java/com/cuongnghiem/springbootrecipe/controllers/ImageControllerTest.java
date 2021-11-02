@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
@@ -45,7 +46,7 @@ class ImageControllerTest {
     @Test
     void getUploadImageForm() throws Exception {
 
-        when(recipeService.getRecipeById(anyString())).thenReturn(new Recipe());
+        when(recipeService.getRecipeById(anyString())).thenReturn(Mono.just(new Recipe()));
 
         mockMvc.perform(get("/recipe/1L/image/upload"))
                 .andExpect(status().isOk())
@@ -73,7 +74,7 @@ class ImageControllerTest {
         for (byte i = 0; i < 15; i++)
             image[i] = i;
         recipe.setImage(image);
-        when(recipeService.getRecipeById(anyString())).thenReturn(recipe);
+        when(recipeService.getRecipeById(anyString())).thenReturn(Mono.just(recipe));
 
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/1L/imageFile"))
                 .andExpect(status().isOk())

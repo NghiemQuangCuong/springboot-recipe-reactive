@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.Set;
@@ -34,12 +35,12 @@ public class RecipeController {
 
     @GetMapping({"/{id}/show"})
     public String getRecipe(@PathVariable String id, Model model) {
-        Recipe recipe = recipeService.getRecipeById(id);
-        if (recipe != null) {
-            model.addAttribute("recipe", recipeToRecipeCommand.convert(recipe));
-            return "recipe/show";
-        }
-        throw new NotFoundException("Recipe not found, id = " + id);
+        Mono<RecipeCommand> recipeCommand = recipeService
+                .getRecipeById(id)
+                .map(recipeToRecipeCommand::convert);
+
+        model.addAttribute("recipe", recipeCommand.block());
+        return "recipe/show";
     }
 
     @GetMapping({"/new"})
@@ -55,12 +56,12 @@ public class RecipeController {
 
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
-        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(id);
+        Mono<RecipeCommand> recipeCommand = recipeService.getRecipeCommandById(id);
         if (recipeCommand != null) {
             Set<CategoryCommand> categoryCommands =
                     categoryService.getAllCategoryCommand();
 
-            model.addAttribute("recipe", recipeCommand);
+            model.addAttribute("recipe", recipeCommand.block());
             model.addAttribute("listCategory", categoryCommands);
 
             return RECIPE_NEW_OR_UPDATE;
@@ -83,13 +84,12 @@ public class RecipeController {
             Set<CategoryCommand> categoryCommands =
                     categoryService.getAllCategoryCommand();
             model.addAttribute("listCategory", categoryCommands);
-
-            RecipeCommand fullRecipe = recipeService.getRecipeCommandById(command.getId());
+            RecipeCommand fullRecipe = recipeService.getRecipeCommandById(command.getId()).block();
             command.setIngredients(fullRecipe.getIngredients());
             return RECIPE_NEW_OR_UPDATE;
         }
 
-        RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command);
+        RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command).block();
 
         return "redirect:/recipe/" + recipeCommand.getId() + "/show";
     }

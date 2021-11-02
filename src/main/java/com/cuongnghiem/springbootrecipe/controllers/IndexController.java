@@ -30,12 +30,10 @@ public class IndexController {
     public String getIndexPage(Model model) {
         log.debug("Getting Index page");
 
-        Set<RecipeCommand> recipeCommandSet = new HashSet<>();
-        recipeService.getRecipes().forEach(recipe -> {
-            recipeCommandSet.add(recipeToRecipeCommand.convert(recipe));
-        });
-
-        model.addAttribute("recipes", recipeCommandSet);
+        model.addAttribute("recipes", recipeService.getRecipes()
+                .map(recipeToRecipeCommand::convert)
+                .collectList()
+                .block());
 
         return "index";
     }
