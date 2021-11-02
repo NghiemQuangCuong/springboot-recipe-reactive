@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -45,8 +46,8 @@ public class RecipeController {
 
     @GetMapping({"/new"})
     public String newRecipe(Model model) {
-        Set<CategoryCommand> categoryCommands =
-            categoryService.getAllCategoryCommand();
+        Flux<CategoryCommand> categoryCommands =
+                categoryService.getAllCategoryCommand();
 
         model.addAttribute("recipe", new RecipeCommand());
         model.addAttribute("listCategory", categoryCommands);
@@ -58,11 +59,11 @@ public class RecipeController {
     public String updateRecipe(@PathVariable String id, Model model) {
         Mono<RecipeCommand> recipeCommand = recipeService.getRecipeCommandById(id);
         if (recipeCommand != null) {
-            Set<CategoryCommand> categoryCommands =
+            Flux<CategoryCommand> categoryCommands =
                     categoryService.getAllCategoryCommand();
 
             model.addAttribute("recipe", recipeCommand.block());
-            model.addAttribute("listCategory", categoryCommands);
+            model.addAttribute("listCategory", categoryCommands.collectList().block());
 
             return RECIPE_NEW_OR_UPDATE;
         }
@@ -77,20 +78,18 @@ public class RecipeController {
                                ){
         if (cats != null)
             cats.forEach(catId -> {
-                command.getCategories().add(categoryService.findById(catId));
+                command.getCategories().add(categoryService.findById(catId).block());
             });
 
         if (bindingResult.hasErrors()) {
-            Set<CategoryCommand> categoryCommands =
+            Flux<CategoryCommand> categoryCommands =
                     categoryService.getAllCategoryCommand();
-            model.addAttribute("listCategory", categoryCommands);
+            model.addAttribute("listCategory", categoryCommands.collectList().block());
             RecipeCommand fullRecipe = recipeService.getRecipeCommandById(command.getId()).block();
             command.setIngredients(fullRecipe.getIngredients());
             return RECIPE_NEW_OR_UPDATE;
         }
-
         RecipeCommand recipeCommand = recipeService.saveRecipeCommand(command).block();
-
         return "redirect:/recipe/" + recipeCommand.getId() + "/show";
     }
 

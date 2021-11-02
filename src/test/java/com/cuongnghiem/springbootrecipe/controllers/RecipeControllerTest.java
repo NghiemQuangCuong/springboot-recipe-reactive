@@ -1,5 +1,6 @@
 package com.cuongnghiem.springbootrecipe.controllers;
 
+import com.cuongnghiem.springbootrecipe.command.CategoryCommand;
 import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
 import com.cuongnghiem.springbootrecipe.converters.RecipeToRecipeCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
@@ -61,7 +63,7 @@ class RecipeControllerTest {
     @Test
     void newRecipe() throws Exception{
 
-        when(categoryService.getAllCategoryCommand()).thenReturn(new HashSet<>());
+        when(categoryService.getAllCategoryCommand()).thenReturn(Flux.just(new CategoryCommand()));
 
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
@@ -86,9 +88,8 @@ class RecipeControllerTest {
 
     @Test
     void testPostNewRecipeFail() throws Exception{
-
         when(recipeService.getRecipeCommandById(any())).thenReturn(Mono.just(new RecipeCommand()));
-
+        when(categoryService.getAllCategoryCommand()).thenReturn(Flux.just(new CategoryCommand()));
         mockMvc.perform(post("/recipe")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id", "1"))
@@ -101,7 +102,7 @@ class RecipeControllerTest {
         RecipeCommand recipeCommand = RecipeCommand.builder().id("1L").build();
 
         when(recipeService.getRecipeCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
-        when(categoryService.getAllCategoryCommand()).thenReturn(new HashSet<>());
+        when(categoryService.getAllCategoryCommand()).thenReturn(Flux.just(new CategoryCommand()));
 
         mockMvc.perform(get("/recipe/1L/update"))
                 .andExpect(status().isOk())

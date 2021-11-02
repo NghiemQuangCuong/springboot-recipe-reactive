@@ -1,6 +1,8 @@
 package com.cuongnghiem.springbootrecipe.services;
 
 import com.cuongnghiem.springbootrecipe.command.CategoryCommand;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
@@ -9,6 +11,6 @@ import java.util.Set;
  **/
 
 public interface CategoryService {
-    CategoryCommand findById(String id);
-    Set<CategoryCommand> getAllCategoryCommand();
+    Mono<CategoryCommand> findById(String id);
+    Flux<CategoryCommand> getAllCategoryCommand();
 }

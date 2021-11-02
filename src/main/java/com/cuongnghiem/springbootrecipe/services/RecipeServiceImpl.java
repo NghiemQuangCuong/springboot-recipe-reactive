@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by jt on 6/13/17.
@@ -87,9 +88,12 @@ public class RecipeServiceImpl implements RecipeService {
         availableRecipe.setPrepTime(command.getPrepTime());
         availableRecipe.setSource(command.getSource());
         availableRecipe.setNotes(notesCommandToNotes.convert(command.getNotes()));
-        command.getCategories().forEach(categoryCommand -> {
-            availableRecipe.getCategories().add(categoryCommandToCategory.convert(categoryCommand));
-        });
+        availableRecipe.setCategories(
+                command.getCategories()
+                        .stream()
+                        .map(categoryCommandToCategory::convert)
+                        .collect(Collectors.toSet())
+        );
 
         return recipeRepository.save(availableRecipe)
                 .map(recipeToRecipeCommand::convert);
