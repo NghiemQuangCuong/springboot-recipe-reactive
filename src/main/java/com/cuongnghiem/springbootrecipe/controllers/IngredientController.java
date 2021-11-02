@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
@@ -44,10 +45,10 @@ public class IngredientController {
     public String viewIngredient(@PathVariable String recipeId,
                                  @PathVariable String ingredientId,
                                  Model model) {
-        IngredientCommand ingredientCommand =
+        Mono<IngredientCommand> ingredientCommand =
                 ingredientService.findCommandByIdWithRecipeId(ingredientId, recipeId);
         if (ingredientCommand != null) {
-            model.addAttribute("ingredient", ingredientCommand);
+            model.addAttribute("ingredient", ingredientCommand.block());
             return "recipe/ingredient/view";
         }
         throw new NotFoundException("Ingredient with Recipe not found. ingredientId = "
@@ -58,12 +59,12 @@ public class IngredientController {
     public String getIngredientUpdate(@PathVariable String recipeId,
                                       @PathVariable String ingredientId,
                                       Model model) {
-        IngredientCommand ingredientCommand
+        Mono<IngredientCommand> ingredientCommand
                 = ingredientService.findCommandByIdWithRecipeId(ingredientId, recipeId);
         if (ingredientCommand != null) {
             Flux<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
-            model.addAttribute("ingredient", ingredientCommand);
+            model.addAttribute("ingredient", ingredientCommand.block());
             model.addAttribute("listUOM", listUOM.collectList().block());
 
             return "recipe/ingredient/new_or_update";
@@ -91,7 +92,7 @@ public class IngredientController {
     @PostMapping("/ingredient/update")
     public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
         IngredientCommand savedIngredientCommand
-                = ingredientService.saveIngredientCommand(ingredientCommand);
+                = ingredientService.saveIngredientCommand(ingredientCommand).block();
 
         if (savedIngredientCommand != null)
             return "redirect:/recipe/" +

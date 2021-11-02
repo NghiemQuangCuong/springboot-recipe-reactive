@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 
@@ -58,9 +59,8 @@ class IngredientControllerTest {
 
     @Test
     void viewAnIngredient() throws Exception {
-        IngredientCommand ingredientCommand = new IngredientCommand();
-
-        when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString())).thenReturn(ingredientCommand);
+        when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString()))
+                .thenReturn(Mono.just(new IngredientCommand()));
 
         mockMvc.perform(get("/recipe/1L/ingredient/1L/show"))
                 .andExpect(status().isOk())
@@ -70,9 +70,8 @@ class IngredientControllerTest {
 
     @Test
     void getUpdateViewOfAnIngredient() throws Exception {
-        IngredientCommand ingredientCommand = new IngredientCommand();
-
-        when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString())).thenReturn(ingredientCommand);
+        when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString()))
+                .thenReturn(Mono.just(new IngredientCommand()));
         when(uomService.getAllUoMCommand()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         mockMvc.perform(get("/recipe/1L/ingredient/1L/update"))
@@ -88,7 +87,8 @@ class IngredientControllerTest {
         ingredientCommand.setId("2L");
         ingredientCommand.setRecipeId("3L");
 
-        when(ingredientService.saveIngredientCommand(any())).thenReturn(ingredientCommand);
+        when(ingredientService.saveIngredientCommand(any()))
+                .thenReturn(Mono.just(ingredientCommand));
 
         mockMvc.perform(post("/recipe/ingredient/update")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
