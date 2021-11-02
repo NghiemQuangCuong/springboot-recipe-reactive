@@ -54,7 +54,7 @@ public class IngredientServiceImpl implements IngredientService{
         try {
             Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
             ingredient.setRecipe(recipeService.getRecipeById(ingredientCommand.getRecipeId()));
-            ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()));
+            ingredient.setUom(unitOfMeasureService.getUOMById(ingredientCommand.getUom().getId()).block());
             ingredientRepository.save(ingredient);
 
             Recipe recipe = recipeService.getRecipeById(ingredientCommand.getRecipeId());

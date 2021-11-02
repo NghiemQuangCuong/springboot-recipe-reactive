@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.util.Set;
 
@@ -60,10 +61,10 @@ public class IngredientController {
         IngredientCommand ingredientCommand
                 = ingredientService.findCommandByIdWithRecipeId(ingredientId, recipeId);
         if (ingredientCommand != null) {
-            Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
+            Flux<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
             model.addAttribute("ingredient", ingredientCommand);
-            model.addAttribute("listUOM", listUOM);
+            model.addAttribute("listUOM", listUOM.collectList().block());
 
             return "recipe/ingredient/new_or_update";
         }
@@ -79,10 +80,10 @@ public class IngredientController {
 
         ingredientCommand.setRecipeId(recipeId);
 
-        Set<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
+        Flux<UnitOfMeasureCommand> listUOM = uomService.getAllUoMCommand();
 
         model.addAttribute("ingredient", ingredientCommand);
-        model.addAttribute("listUOM", listUOM);
+        model.addAttribute("listUOM", listUOM.collectList().block());
 
         return "recipe/ingredient/new_or_update";
     }

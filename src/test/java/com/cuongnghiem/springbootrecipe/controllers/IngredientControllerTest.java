@@ -2,6 +2,7 @@ package com.cuongnghiem.springbootrecipe.controllers;
 
 import com.cuongnghiem.springbootrecipe.command.IngredientCommand;
 import com.cuongnghiem.springbootrecipe.command.RecipeCommand;
+import com.cuongnghiem.springbootrecipe.command.UnitOfMeasureCommand;
 import com.cuongnghiem.springbootrecipe.model.Recipe;
 import com.cuongnghiem.springbootrecipe.services.IngredientService;
 import com.cuongnghiem.springbootrecipe.services.RecipeService;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import reactor.core.publisher.Flux;
 
 import java.util.HashSet;
 
@@ -71,7 +73,7 @@ class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
         when(ingredientService.findCommandByIdWithRecipeId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(uomService.getAllUoMCommand()).thenReturn(new HashSet<>());
+        when(uomService.getAllUoMCommand()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         mockMvc.perform(get("/recipe/1L/ingredient/1L/update"))
                 .andExpect(status().isOk())
@@ -98,7 +100,7 @@ class IngredientControllerTest {
     void newIngredient() throws Exception {
 
         when(recipeService.getRecipeById(anyString())).thenReturn(new Recipe());
-        when(uomService.getAllUoMCommand()).thenReturn(new HashSet<>());
+        when(uomService.getAllUoMCommand()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         mockMvc.perform(get("/recipe/1L/ingredient/new"))
                 .andExpect(status().isOk())
