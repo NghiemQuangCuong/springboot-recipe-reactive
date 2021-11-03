@@ -29,6 +29,6 @@ public class ImageServiceImpl implements ImageService {
             throw new RuntimeException("Cannot find recipe id = " + recipeId);
 
         recipe.setImage(file.getBytes());
-        recipeService.save(recipe);
+        recipeService.save(recipe).block();
     }
 }

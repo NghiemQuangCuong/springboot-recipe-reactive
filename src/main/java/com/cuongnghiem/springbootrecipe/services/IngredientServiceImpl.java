@@ -66,6 +66,16 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public void deleteByIdAndRecipeId(String id, String recipeId) {
+
+//        ingredientRepository.findByRecipe_IdAndId(recipeId, id)
+//                .subscribe(ingredient -> {
+//                    recipeService.getRecipeById(recipeId).subscribe(recipe -> {
+//                        recipe.getIngredients().removeIf(ingredient1 -> ingredient1.getId().equals(ingredient.getId()));
+//                        recipeRepository.save(recipe).block();
+//                        ingredientRepository.delete(ingredient).block();
+//                    });
+//                });
+
         Ingredient ingredient =
                 ingredientRepository.findByRecipe_IdAndId(recipeId, id).block();
         if (ingredient == null)

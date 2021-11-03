@@ -42,7 +42,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     private void saveRecipe() {
-
         categoryRepository.save(Category.builder().description("American").build());
         categoryRepository.save(Category.builder().description("Italian").build());
         categoryRepository.save(Category.builder().description("Mexican").build());
@@ -55,7 +54,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         unitOfMeasureRepository.save(UnitOfMeasure.builder().description("Each").build());
         unitOfMeasureRepository.save(UnitOfMeasure.builder().description("Dash").build());
         unitOfMeasureRepository.save(UnitOfMeasure.builder().description("Pint").build());
-
 
         //get UOMs
         Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
